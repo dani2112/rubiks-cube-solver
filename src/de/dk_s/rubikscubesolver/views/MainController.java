@@ -10,6 +10,8 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+import de.rubikscubesolver.recognition.ColorCubeRecognizer;
+import de.rubikscubesolver.recognition.CubeRecognizer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,14 +29,18 @@ public class MainController {
 	private boolean isInputStarted = false;
 	
 	private VideoCapture videoCapture = null;
+	
+	private ScheduledExecutorService executor = null;
 
+	private CubeRecognizer cubeRecognizer = null;
+	
 	private Runnable frameGrabber = new Runnable() {
 
 		@Override
 		public void run() {
 			Mat frame = getNextFrame(videoCapture);
+			cubeRecognizer.recognize(frame);
 			Image frameImage = mat2Image(frame);
-
 			Platform.runLater(new Runnable() {
 				public void run() {
 					if (frameImage != null) {
@@ -46,11 +52,14 @@ public class MainController {
 
 	};
 
-	private ScheduledExecutorService executor = null;
-
+	public MainController() {
+		this.cubeRecognizer = new ColorCubeRecognizer();
+	}
+	
 	@FXML
 	protected void startCamera(ActionEvent event) {
 		if(isInputStarted) {
+			
 			try {
 				executor.shutdown();
 				executor.awaitTermination(100, TimeUnit.MILLISECONDS);
