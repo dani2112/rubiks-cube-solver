@@ -2,6 +2,7 @@ package de.dk_s.rubikscubesolver;
 	
 import org.opencv.core.Core;
 
+import de.dk_s.rubikscubesolver.views.MainController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;

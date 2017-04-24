@@ -1,4 +1,4 @@
-package de.dk_s.rubikscubesolver;
+package de.dk_s.rubikscubesolver.views;
 
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.Executors;
@@ -24,14 +24,15 @@ public class MainController {
 	@FXML
 	private ImageView currentFrameView;
 
+	private boolean isInputStarted = false;
+	
 	private VideoCapture videoCapture = null;
 
 	private Runnable frameGrabber = new Runnable() {
 
 		@Override
 		public void run() {
-			Mat frame = new Mat();
-			videoCapture.read(frame);
+			Mat frame = getNextFrame(videoCapture);
 			Image frameImage = mat2Image(frame);
 
 			Platform.runLater(new Runnable() {
@@ -49,16 +50,36 @@ public class MainController {
 
 	@FXML
 	protected void startCamera(ActionEvent event) {
-		videoCapture = new VideoCapture(1);
-		if (this.videoCapture.isOpened()) {
-			executor = Executors.newSingleThreadScheduledExecutor();
-			executor.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+		if(isInputStarted) {
+			try {
+				executor.shutdown();
+				executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				System.out.println("Could not shutdown frame Capture!");
+			}
+			isInputStarted = false;
+		} else {
+			videoCapture = new VideoCapture(1);
+			if (this.videoCapture.isOpened()) {
+				executor = Executors.newSingleThreadScheduledExecutor();
+				executor.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+			}
+			isInputStarted = true;
 		}
 	}
 
 	public void setClosed() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	/* Helper functions for video capturing */
+	private Mat getNextFrame(VideoCapture inputCapture) {
+		Mat frame = new Mat();
+		if (inputCapture.isOpened()) {
+			inputCapture.read(frame);
+		}
+		return frame;
 	}
 
 	private Image mat2Image(Mat frame) {
