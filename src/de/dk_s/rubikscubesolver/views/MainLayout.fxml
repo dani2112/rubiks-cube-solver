@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.dk_s.rubikscubesolver.MainController">
+   <bottom>
+      <Button fx:id="startCameraButton" mnemonicParsing="false" onAction="#startCamera" text="Start Camera" BorderPane.alignment="CENTER" />
+   </bottom>
+   <center>
+      <ImageView fx:id="currentFrameView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
