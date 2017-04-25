@@ -17,7 +17,12 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 	@Override
 	public void recognize(Mat frame) {
 		//processImageColor(frame);
-		processImageShape(frame);
+		//processImageShape(frame);
+		processSlidingWindow(frame);
+	}
+	
+	private void processSlidingWindow(Mat frame) {
+		CubeEdgeDetector.detect(frame);
 	}
 	
 	private void processImageColor(Mat frame) {
@@ -77,14 +82,14 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 			Imgproc.drawMarker(frame, new Point(center, 300), new Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
 		}
 		
-//		
-//		clusters.clear();
-//		int[] yClusterSamples = highGradientYRows.stream().mapToInt(i->i).toArray();
-//		clusters = kMeans(yClusterSamples, 4);
-//		for(Double center : clusters) {
-//			Imgproc.drawMarker(frame, new Point(center, 300), new Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-//		}
-//		
+		
+		clusters.clear();
+		int[] yClusterSamples = highGradientYRows.stream().mapToInt(i->i).toArray();
+		clusters = kMeans(yClusterSamples, 4);
+		for(Double center : clusters) {
+			Imgproc.drawMarker(frame, new Point(50, center), new Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+		}
+		
 //		for(Integer x : highGradientXCols) {
 //			Imgproc.drawMarker(frame, new Point(x, 300), new Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
 //		}
