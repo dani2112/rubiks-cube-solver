@@ -10,6 +10,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.TermCriteria;
+import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 
 import de.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
@@ -30,6 +31,7 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 	private void processImageShape2(Mat frame) {
 		Mat procFrame = frame.clone();
 		Imgproc.cvtColor(procFrame, procFrame, Imgproc.COLOR_BGR2GRAY);
+		
 		/*
 		 * Apply normalized Box Filter which at each position calculates the
 		 * average value of the pixels in a block with the given size
@@ -68,7 +70,7 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 						double areaValue = getAreaValue(row, col, rectangleRows, rectangleCols, integralImage.cols(),
 								integralValues);
 
-						if (areaValue > 60000) {
+						if (areaValue > 50000) {
 							highGradientXCols.add(col);
 						}
 					}
@@ -107,7 +109,7 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 						double areaValue = getAreaValue(row, col, rectangleRows2, rectangleCols2, integralImage2.cols(),
 								integralValues2);
 
-						if (areaValue > 75000) {
+						if (areaValue > 60000) {
 							highGradientYRows.add(row);
 						}
 					}
