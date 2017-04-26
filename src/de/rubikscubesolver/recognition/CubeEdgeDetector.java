@@ -56,51 +56,25 @@ public class CubeEdgeDetector {
 		double[] integralValues = new double[(int) integralImage.total()];
 		integralImage.get(0, 0, integralValues);
 
-		int rectangleRows = 40;
-		int rectangleCols = 10;
+		int rectangleRows = 20;
+		int rectangleCols = 5;
 		int rowStep = 5;
 		int colStep = 5;
 
 		SlidingWindowExecutor.process(integralImage, rectangleRows, rectangleCols, rowStep, colStep,
 				new SlidingWindowAlgorithm() {
 
-					private int currentRow = 0;
-					private List<DataPoint> colResultValues = new ArrayList<>(integralImage.cols() / colStep);
 
 					@Override
 					public void processRoi(int row, int col) {
 						double areaValue = getAreaValue(row, col, rectangleRows, rectangleCols, integralImage.cols(),
 								integralValues);
 
-						/* Do something when row is switched */
-						if (currentRow != row) {
-
-							DataPoint[] resultArray = new DataPoint[colResultValues.size()];
-							resultArray = colResultValues.toArray(resultArray);
-							Arrays.sort(resultArray, new Comparator<DataPoint>() {
-
-								@Override
-								public int compare(DataPoint arg0, DataPoint arg1) {
-									return (int) Math.signum(arg0.gradientValue - arg1.gradientValue);
-								}
-
-							});
-
-							DataPoint[] top30 = Arrays.copyOfRange(resultArray, resultArray.length - 30,
-									resultArray.length);
-							for (DataPoint top : top30) {
-								Imgproc.drawMarker(image, new Point(top.colIndex, row), new Scalar(255, 0, 0),
-										Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-							}
-							currentRow = row;
-						}
-						colResultValues.add(new DataPoint(col, areaValue));
-
-						// if(areaValue > 10000) {
-						// Imgproc.drawMarker(image, new Point(col, row), new
-						// Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2,
-						// Imgproc.LINE_4);
-						// }
+						 if(areaValue > 3000) {
+						 Imgproc.drawMarker(image, new Point(col, row), new
+						 Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2,
+						 Imgproc.LINE_4);
+						 }
 					}
 
 				});
