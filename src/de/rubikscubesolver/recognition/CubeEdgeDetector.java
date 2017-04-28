@@ -69,7 +69,6 @@ public class CubeEdgeDetector {
 					public void processRoi(int row, int col) {
 						double areaValue = getAreaValue(row, col, rectangleRows, rectangleCols, integralImage.cols(),
 								integralValues);
-
 						 if(areaValue > 3000) {
 						 Imgproc.drawMarker(image, new Point(col, row), new
 						 Scalar(255,0,0), Imgproc.MARKER_CROSS, 5, 2,
