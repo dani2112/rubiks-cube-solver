@@ -18,18 +18,17 @@ import de.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgori
 
 public class ColorCubeRecognizer implements CubeRecognizer {
 
-	
 	public static class Distance {
-		
+
 		public Distance(int similarDistances, double averageOfSimilarDistances) {
 			this.similarDistances = similarDistances;
 			this.averageOfSimilarDistances = averageOfSimilarDistances;
 		}
-		
+
 		public int similarDistances;
 		public double averageOfSimilarDistances;
 	}
-	
+
 	@Override
 	public void recognize(Mat frame) {
 		processImageShape(frame);
@@ -128,41 +127,156 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 
 		List<Distance> similarCountsPerDistanceX = new ArrayList<>();
 		List<Distance> similarCountsPerDistanceY = new ArrayList<>();
-		double averageDistance = doDistanceVoting(highGradientXCols, highGradientYRows, similarCountsPerDistanceX, similarCountsPerDistanceY);
+		double averageDistance = doDistanceVoting(highGradientXCols, highGradientYRows, similarCountsPerDistanceX,
+				similarCountsPerDistanceY);
 
-		System.out.println(averageDistance);
-		
 		List<Integer> selectedPointsX = new ArrayList<>();
-		//selectPoints(highGradientXCols, similarCountsPerDistanceX, selectedPointsX);
+		if (!Double.isNaN(averageDistance)) {
+			selectPoints(highGradientXCols, similarCountsPerDistanceX, selectedPointsX, averageDistance);
+			if (selectedPointsX.size() != 0 && isPointListSorted(selectedPointsX)) {
+				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(0), 300), new Scalar(0, 255, 0),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(1), 300), new Scalar(255, 0, 0),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(2), 300), new Scalar(0, 0, 255),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(3), 300), new Scalar(255, 0, 255),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+			}
+		}
 
-		for (Integer x : highGradientXCols) {
-			Imgproc.drawMarker(frame, new Point(x, 300), new Scalar(255, 0, 0), Imgproc.MARKER_CROSS, 5, 2,
-					Imgproc.LINE_4);
+		
+		List<Integer> selectedPointsY = new ArrayList<>();
+		if (!Double.isNaN(averageDistance)) {
+			selectPoints(highGradientYRows, similarCountsPerDistanceY, selectedPointsY, averageDistance);
+			if (selectedPointsY.size() != 0 && isPointListSorted(selectedPointsY)) {
+				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(0)), new Scalar(0, 255, 0),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(1)), new Scalar(255, 0, 0),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(2)), new Scalar(0, 0, 255),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(3)), new Scalar(255, 0, 255),
+						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+			}
 		}
-		for (Integer y : highGradientYRows) {
-			Imgproc.drawMarker(frame, new Point(150, y), new Scalar(255, 0, 0), Imgproc.MARKER_CROSS, 5, 2,
-					Imgproc.LINE_4);
-		}
+		
+		// for (Integer x : highGradientXCols) {
+		// Imgproc.drawMarker(frame, new Point(x, 300), new Scalar(255, 0, 0),
+		// Imgproc.MARKER_CROSS, 5, 2,
+		// Imgproc.LINE_4);
+		// }
+		// for (Integer y : highGradientYRows) {
+		// Imgproc.drawMarker(frame, new Point(150, y), new Scalar(255, 0, 0),
+		// Imgproc.MARKER_CROSS, 5, 2,
+		// Imgproc.LINE_4);
+		// }
 
 	}
+	
+	public boolean isPointListSorted(List<Integer> pointList)
+	{
+	    boolean sorted = true;        
+	    for (int i = 1; i < pointList.size(); i++) {
+	        if (pointList.get(i-1).compareTo(pointList.get(i)) > 0) sorted = false;
+	    }
 
-	private void selectPoints(List<Integer> pointList, List<Integer> similarCountsPerDistance,
-			List<Integer> selectedPointList) {
-
+	    return sorted;
 	}
 
-	private double doDistanceVoting(List<Integer> pointListX, List<Integer> pointListY,
-			List<Distance> distancesX, List<Distance> distancesY) {
+	private void selectPoints(List<Integer> pointList, List<Distance> distances, List<Integer> selectedPointsList,
+			double averageDistance) {
+		if (pointList.size() == 0) {
+			return;
+		}
+		/* Berechnung von Wahrscheinlichkeiten für die Begrenzungspunkte */
+		List<Double> pointProbabilities = new ArrayList<>();
+		/* Berechnung für Startpunkt */
+		int pointIndex = -1;
+		double maxProbability = Double.MIN_VALUE;
+		for (int i = 0; i < pointList.size(); i++) {
+			int pos1 = (int) (pointList.get(i) + averageDistance);
+			int pos2 = (int) (pointList.get(i) + (2 * averageDistance));
+			int pos3 = (int) (pointList.get(i) + (3 * averageDistance));
+			double probability = 1 / (double) (getMinimumDistance(pointList, pos1) + getMinimumDistance(pointList, pos2)
+					+ getMinimumDistance(pointList, pos3));
+			if (probability > maxProbability) {
+				maxProbability = probability;
+				pointIndex = i;
+			}
+		}
+		selectedPointsList.add(pointList.get(pointIndex));
+		
+		pointIndex = -1;
+		maxProbability = Double.MIN_VALUE;
+		for (int i = 0; i < pointList.size(); i++) {
+			int pos1 = (int) (pointList.get(i) - averageDistance);
+			int pos2 = (int) (pointList.get(i) + averageDistance);
+			int pos3 = (int) (pointList.get(i) + (2 * averageDistance));
+			double probability = 1 / (double) (getMinimumDistance(pointList, pos1) + getMinimumDistance(pointList, pos2)
+					+ getMinimumDistance(pointList, pos3));
+			if (probability > maxProbability) {
+				maxProbability = probability;
+				pointIndex = i;
+			}
+		}
+		selectedPointsList.add(pointList.get(pointIndex));
+		
+		pointIndex = -1;
+		maxProbability = Double.MIN_VALUE;
+		for (int i = 0; i < pointList.size(); i++) {
+			int pos1 = (int) (pointList.get(i) - averageDistance);
+			int pos2 = (int) (pointList.get(i) - (2 * averageDistance));
+			int pos3 = (int) (pointList.get(i) + averageDistance);
+			double probability = 1 / (double) (getMinimumDistance(pointList, pos1) + getMinimumDistance(pointList, pos2)
+					+ getMinimumDistance(pointList, pos3));
+			if (probability > maxProbability) {
+				maxProbability = probability;
+				pointIndex = i;
+			}
+		}
+		selectedPointsList.add(pointList.get(pointIndex));
+		
+		pointIndex = -1;
+		maxProbability = Double.MIN_VALUE;
+		for (int i = 0; i < pointList.size(); i++) {
+			int pos1 = (int) (pointList.get(i) - averageDistance);
+			int pos2 = (int) (pointList.get(i) - (2 * averageDistance));
+			int pos3 = (int) (pointList.get(i) - (3 * averageDistance));
+			double probability = 1 / (double) (getMinimumDistance(pointList, pos1) + getMinimumDistance(pointList, pos2)
+					+ getMinimumDistance(pointList, pos3));
+			if (probability > maxProbability) {
+				maxProbability = probability;
+				pointIndex = i;
+			}
+		}
+		selectedPointsList.add(pointList.get(pointIndex));
+	}
+
+	private int getMinimumDistance(List<Integer> pointList, int position) {
+		int minDistance = Integer.MAX_VALUE;
+		for (int i = 0; i < pointList.size(); i++) {
+			int currentPosition = pointList.get(i);
+			int distance = Math.abs(currentPosition - position);
+			if (distance < minDistance) {
+				minDistance = distance;
+			}
+		}
+		return minDistance;
+	}
+
+	private double doDistanceVoting(List<Integer> pointListX, List<Integer> pointListY, List<Distance> distancesX,
+			List<Distance> distancesY) {
 		/*
 		 * Tolerance that distances can be different to still be voted as the
 		 * same
 		 */
 		int tolerance = 30;
-		
+
 		/* Index and value of the maximum similarity Distance in x direction */
 		int maxSimilarityIndexX = -1;
 		int maxSimilarityX = Integer.MIN_VALUE;
-		
+
 		/*
 		 * Compare each Distance in X direction with all other distances and
 		 * safe count of similar distances in similarCountsPerDistanceX
@@ -191,11 +305,11 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 			}
 			averageDistance /= similarCounts;
 			distancesX.add(new Distance(similarCounts, averageDistance));
-			if(similarCounts > maxSimilarityX) {
+			if (similarCounts > maxSimilarityX) {
 				maxSimilarityX = similarCounts;
 				maxSimilarityIndexX = distancesX.size() - 1;
 			}
-			
+
 		}
 		/* Index and value of the maximum similarity Distance in y direction */
 		int maxSimilarityIndexY = -1;
@@ -228,18 +342,18 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 			}
 			averageDistance /= similarCounts;
 			distancesY.add(new Distance(similarCounts, averageDistance));
-			
-			if(similarCounts > maxSimilarityY) {
+
+			if (similarCounts > maxSimilarityY) {
 				maxSimilarityY = similarCounts;
 				maxSimilarityIndexY = distancesY.size() - 1;
 			}
 		}
-		
+
 		double averageDistance = 0.0;
-		if(maxSimilarityIndexX != -1 || maxSimilarityIndexY != -1) {
-			if(maxSimilarityX > maxSimilarityY) {
+		if (maxSimilarityIndexX != -1 || maxSimilarityIndexY != -1) {
+			if (maxSimilarityX > maxSimilarityY) {
 				averageDistance = distancesX.get(maxSimilarityIndexX).averageOfSimilarDistances;
-			} else if(maxSimilarityY >= maxSimilarityX){
+			} else if (maxSimilarityY >= maxSimilarityX) {
 				averageDistance = distancesY.get(maxSimilarityIndexY).averageOfSimilarDistances;
 			}
 		}
