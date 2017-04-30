@@ -10,8 +10,8 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
-import de.rubikscubesolver.recognition.ColorCubeRecognizer;
 import de.rubikscubesolver.recognition.CubeRecognizer;
+import de.rubikscubesolver.recognition.ShapeCubeDetector;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,7 +53,7 @@ public class MainController {
 	};
 
 	public MainController() {
-		this.cubeRecognizer = new ColorCubeRecognizer();
+		this.cubeRecognizer = new CubeRecognizer();
 	}
 	
 	@FXML

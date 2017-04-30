@@ -1,7 +1,6 @@
 package de.rubikscubesolver.recognition;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.opencv.core.Core;
@@ -10,13 +9,11 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.core.TermCriteria;
-import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 
 import de.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
 
-public class ColorCubeRecognizer implements CubeRecognizer {
+public class ShapeCubeDetector implements CubeDetector {
 
 	public static class Distance {
 
@@ -29,12 +26,25 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 		public double averageOfSimilarDistances;
 	}
 
+	public static class CubePosition {
+		
+		public CubePosition(List<Integer> cubePositionsX, List<Integer> cubePositionsY, double averageDistance) {
+			this.cubePositionsX = cubePositionsX;
+			this.cubePositionsY = cubePositionsY;
+			this.averageDistance = averageDistance;
+		}
+		
+		public List<Integer> cubePositionsX = null;
+		public List<Integer> cubePositionsY = null;
+		public double averageDistance = 0.0;
+	}
+	
 	@Override
-	public void recognize(Mat frame) {
-		processImageShape(frame);
+	public CubePosition recognize(Mat frame) {
+		return processImageShape(frame);
 	}
 
-	private void processImageShape(Mat frame) {
+	private CubePosition processImageShape(Mat frame) {
 		Mat procFrame = frame.clone();
 		Imgproc.cvtColor(procFrame, procFrame, Imgproc.COLOR_BGR2GRAY);
 
@@ -133,7 +143,7 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 		List<Integer> selectedPointsX = new ArrayList<>();
 		if (!Double.isNaN(averageDistance)) {
 			selectPoints(highGradientXCols, similarCountsPerDistanceX, selectedPointsX, averageDistance);
-			if (selectedPointsX.size() != 0 && isPointListSorted(selectedPointsX)) {
+			if (selectedPointsX.size() != 0) {
 				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(0), 300), new Scalar(0, 255, 0),
 						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
 				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(1), 300), new Scalar(255, 0, 0),
@@ -149,7 +159,7 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 		List<Integer> selectedPointsY = new ArrayList<>();
 		if (!Double.isNaN(averageDistance)) {
 			selectPoints(highGradientYRows, similarCountsPerDistanceY, selectedPointsY, averageDistance);
-			if (selectedPointsY.size() != 0 && isPointListSorted(selectedPointsY)) {
+			if (selectedPointsY.size() != 0) {
 				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(0)), new Scalar(0, 255, 0),
 						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
 				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(1)), new Scalar(255, 0, 0),
@@ -161,27 +171,31 @@ public class ColorCubeRecognizer implements CubeRecognizer {
 			}
 		}
 		
-		// for (Integer x : highGradientXCols) {
-		// Imgproc.drawMarker(frame, new Point(x, 300), new Scalar(255, 0, 0),
-		// Imgproc.MARKER_CROSS, 5, 2,
-		// Imgproc.LINE_4);
-		// }
-		// for (Integer y : highGradientYRows) {
-		// Imgproc.drawMarker(frame, new Point(150, y), new Scalar(255, 0, 0),
-		// Imgproc.MARKER_CROSS, 5, 2,
-		// Imgproc.LINE_4);
-		// }
+		if (selectedPointsX.size() > 0 && selectedPointsY.size() > 0 && isValidConfiguration(selectedPointsX, selectedPointsY, averageDistance)) {
+			CubePosition cubePosition = new CubePosition(selectedPointsX, selectedPointsY, averageDistance);
+			return cubePosition;
+		} else {
+			return null;
+		}
 
 	}
 	
-	public boolean isPointListSorted(List<Integer> pointList)
-	{
-	    boolean sorted = true;        
-	    for (int i = 1; i < pointList.size(); i++) {
-	        if (pointList.get(i-1).compareTo(pointList.get(i)) > 0) sorted = false;
+	private boolean isValidConfiguration(List<Integer> selectedPointsX, List<Integer> selectedPointsY, double averageDistance) {
+		int tolerance = 10;
+	    boolean isValid = true;        
+	    for (int i = 1; i < selectedPointsX.size(); i++) {
+	        if (selectedPointsX.get(i-1).compareTo(selectedPointsX.get(i)) > 0 ||
+	        		!(((selectedPointsY.get(i) - selectedPointsY.get(i-1)) - averageDistance) < tolerance)) {
+	        	isValid = false;
+	        }
 	    }
-
-	    return sorted;
+	    for (int i = 1; i < selectedPointsY.size(); i++) {
+	        if (selectedPointsY.get(i-1).compareTo(selectedPointsY.get(i)) > 0 ||
+	        		!(((selectedPointsY.get(i) - selectedPointsY.get(i-1)) - averageDistance) < tolerance) ) {
+	        	isValid = false;
+	        }
+	    }
+	    return isValid;
 	}
 
 	private void selectPoints(List<Integer> pointList, List<Distance> distances, List<Integer> selectedPointsList,
