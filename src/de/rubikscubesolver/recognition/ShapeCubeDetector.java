@@ -1,6 +1,7 @@
 package de.rubikscubesolver.recognition;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.opencv.core.Core;
@@ -27,18 +28,18 @@ public class ShapeCubeDetector implements CubeDetector {
 	}
 
 	public static class CubePosition {
-		
+
 		public CubePosition(List<Integer> cubePositionsX, List<Integer> cubePositionsY, double averageDistance) {
 			this.cubePositionsX = cubePositionsX;
 			this.cubePositionsY = cubePositionsY;
 			this.averageDistance = averageDistance;
 		}
-		
+
 		public List<Integer> cubePositionsX = null;
 		public List<Integer> cubePositionsY = null;
 		public double averageDistance = 0.0;
 	}
-	
+
 	@Override
 	public CubePosition recognize(Mat frame) {
 		return processImageShape(frame);
@@ -142,36 +143,34 @@ public class ShapeCubeDetector implements CubeDetector {
 
 		List<Integer> selectedPointsX = new ArrayList<>();
 		if (!Double.isNaN(averageDistance)) {
-			selectPoints(highGradientXCols, similarCountsPerDistanceX, selectedPointsX, averageDistance);
-			if (selectedPointsX.size() != 0) {
-				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(0), 300), new Scalar(0, 255, 0),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(1), 300), new Scalar(255, 0, 0),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(2), 300), new Scalar(0, 0, 255),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(3), 300), new Scalar(255, 0, 255),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-			}
+			selectPoints2(highGradientXCols, similarCountsPerDistanceX, selectedPointsX, averageDistance);
+//			if (selectedPointsX.size() == 4) {
+//				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(0), 300), new Scalar(0, 255, 0),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(1), 300), new Scalar(255, 0, 0),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(2), 300), new Scalar(0, 0, 255),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//				Imgproc.drawMarker(frame, new Point(selectedPointsX.get(3), 300), new Scalar(255, 0, 255),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//			}
 		}
 
-		
 		List<Integer> selectedPointsY = new ArrayList<>();
 		if (!Double.isNaN(averageDistance)) {
-			selectPoints(highGradientYRows, similarCountsPerDistanceY, selectedPointsY, averageDistance);
-			if (selectedPointsY.size() != 0) {
-				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(0)), new Scalar(0, 255, 0),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(1)), new Scalar(255, 0, 0),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(2)), new Scalar(0, 0, 255),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(3)), new Scalar(255, 0, 255),
-						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
-			}
+			selectPoints2(highGradientYRows, similarCountsPerDistanceY, selectedPointsY, averageDistance);
+//			if (selectedPointsY.size() == 4) {
+//				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(0)), new Scalar(0, 255, 0),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(1)), new Scalar(255, 0, 0),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(2)), new Scalar(0, 0, 255),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//				Imgproc.drawMarker(frame, new Point(50, selectedPointsY.get(3)), new Scalar(255, 0, 255),
+//						Imgproc.MARKER_CROSS, 5, 2, Imgproc.LINE_4);
+//			}
 		}
-		
-		if (selectedPointsX.size() > 0 && selectedPointsY.size() > 0 && isValidConfiguration(selectedPointsX, selectedPointsY, averageDistance)) {
+		if (selectedPointsX.size() == 4 && selectedPointsY.size() == 4) {
 			CubePosition cubePosition = new CubePosition(selectedPointsX, selectedPointsY, averageDistance);
 			return cubePosition;
 		} else {
@@ -179,23 +178,44 @@ public class ShapeCubeDetector implements CubeDetector {
 		}
 
 	}
-	
-	private boolean isValidConfiguration(List<Integer> selectedPointsX, List<Integer> selectedPointsY, double averageDistance) {
+
+	private boolean isValidConfiguration(List<Integer> selectedPointsX, List<Integer> selectedPointsY,
+			double averageDistance) {
 		int tolerance = 10;
-	    boolean isValid = true;        
-	    for (int i = 1; i < selectedPointsX.size(); i++) {
-	        if (selectedPointsX.get(i-1).compareTo(selectedPointsX.get(i)) > 0 ||
-	        		!(((selectedPointsY.get(i) - selectedPointsY.get(i-1)) - averageDistance) < tolerance)) {
-	        	isValid = false;
-	        }
-	    }
-	    for (int i = 1; i < selectedPointsY.size(); i++) {
-	        if (selectedPointsY.get(i-1).compareTo(selectedPointsY.get(i)) > 0 ||
-	        		!(((selectedPointsY.get(i) - selectedPointsY.get(i-1)) - averageDistance) < tolerance) ) {
-	        	isValid = false;
-	        }
-	    }
-	    return isValid;
+		boolean isValid = true;
+		for (int i = 1; i < selectedPointsX.size(); i++) {
+			if (selectedPointsX.get(i - 1).compareTo(selectedPointsX.get(i)) > 0
+					|| !(((selectedPointsY.get(i) - selectedPointsY.get(i - 1)) - averageDistance) < tolerance)) {
+				isValid = false;
+			}
+		}
+		for (int i = 1; i < selectedPointsY.size(); i++) {
+			if (selectedPointsY.get(i - 1).compareTo(selectedPointsY.get(i)) > 0
+					|| !(((selectedPointsY.get(i) - selectedPointsY.get(i - 1)) - averageDistance) < tolerance)) {
+				isValid = false;
+			}
+		}
+		return isValid;
+	}
+
+	private void selectPoints2(List<Integer> pointList, List<Distance> distances, List<Integer> selectedPointsList,
+			double averageDistance) {
+		// int maxSimilarDistances = Integer.MIN_VALUE;
+		// double averageMaxDistances = 0.0;
+		// for(Distance d : distances) {
+		// if(d.similarDistances > maxSimilarDistances) {
+		// maxSimilarDistances = d.similarDistances;
+		// averageMaxDistances = d.averageOfSimilarDistances;
+		// }
+		// }
+		HashMap<Integer, Integer> selectedPointsMap = new HashMap<>();
+		for (int i = 0; i < distances.size(); i++) {
+			if (distances.get(i).similarDistances > 3) {
+				selectedPointsMap.put(i, pointList.get(i));
+				selectedPointsMap.put(i + 1, pointList.get(i + 1));
+			}
+		}
+		selectedPointsList.addAll(selectedPointsMap.values());
 	}
 
 	private void selectPoints(List<Integer> pointList, List<Distance> distances, List<Integer> selectedPointsList,
@@ -220,7 +240,7 @@ public class ShapeCubeDetector implements CubeDetector {
 			}
 		}
 		selectedPointsList.add(pointList.get(pointIndex));
-		
+
 		pointIndex = -1;
 		maxProbability = Double.MIN_VALUE;
 		for (int i = 0; i < pointList.size(); i++) {
@@ -235,7 +255,7 @@ public class ShapeCubeDetector implements CubeDetector {
 			}
 		}
 		selectedPointsList.add(pointList.get(pointIndex));
-		
+
 		pointIndex = -1;
 		maxProbability = Double.MIN_VALUE;
 		for (int i = 0; i < pointList.size(); i++) {
@@ -250,7 +270,7 @@ public class ShapeCubeDetector implements CubeDetector {
 			}
 		}
 		selectedPointsList.add(pointList.get(pointIndex));
-		
+
 		pointIndex = -1;
 		maxProbability = Double.MIN_VALUE;
 		for (int i = 0; i < pointList.size(); i++) {
