@@ -1,29 +1,39 @@
 package de.rubikscubesolver.recognition;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import de.dk_s.rubikscubesolver.domain.CubeFace;
 import de.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
 
+//Saturation: 255, 255, 255, 180, 160, 50
+//Value: 150, 160, 160, 240, 240, 215
+
 public class CubeFaceRecognizer {
 
 	public enum CubeColor {
-		Blue(101), Red(177), Green(47), Orange(5), Yellow(20), White(33);
+		Blue(101, 255, 150), Red(177, 255, 160), Green(47, 255, 160), Orange(5, 180, 240), Yellow(20, 160,
+				240), White(33, 50, 215);
 
 		public int hueValue;
+		public int saturationValue;
+		public int valueValue;
 
-		private CubeColor(int hueValue) {
+		private CubeColor(int hueValue, int saturationValue, int valueValue) {
 			this.hueValue = hueValue;
+			this.saturationValue = saturationValue;
+			this.valueValue = valueValue;
 		}
 	}
 
 	public CubeFace recognize(Mat frame, CubePosition cubePosition) {
+		System.out.println("New Frame");
 		Mat hsvFrame = new Mat();
 		Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
 
@@ -31,27 +41,31 @@ public class CubeFaceRecognizer {
 		Core.split(hsvFrame, channelSplit);
 
 		Mat hueChannel = channelSplit.get(0);
+		Mat saturationChannel = channelSplit.get(1);
 
-		System.out.println("New Frame");
 		List<Integer> cubePositionsY = cubePosition.cubePositionsY;
 		List<Integer> cubePositionsX = cubePosition.cubePositionsX;
 		for (int row = 0; row < cubePositionsY.size() - 1; row++) {
 			for (int col = 0; col < cubePositionsX.size() - 1; col++) {
-				Mat subCube = hueChannel.submat(cubePositionsY.get(row), cubePositionsY.get(row + 1),
+				Mat subCubeHue = hueChannel.submat(cubePositionsY.get(row), cubePositionsY.get(row + 1),
 						cubePositionsX.get(col), cubePositionsX.get(col + 1));
-				byte[] hueValues = new byte[(int) subCube.total()];
+				byte[] hueValues = new byte[(int) subCubeHue.total()];
+				subCubeHue.get(0, 0, hueValues);
 
-				subCube.get(0, 0, hueValues);
-				
+				Mat subCubeSaturation = saturationChannel.submat(cubePositionsY.get(row), cubePositionsY.get(row + 1),
+						cubePositionsX.get(col), cubePositionsX.get(col + 1));
+				byte[] saturationValues = new byte[(int) subCubeSaturation.total()];
+				subCubeSaturation.get(0, 0, saturationValues);
+
 				double[] averageDifferences = new double[CubeColor.values().length];
-				
-				for(int i = 0; i < CubeColor.values().length; i++) {
-					averageDifferences[i] = calculateAverageHueDistance(hueValues, CubeColor.values()[i].hueValue);
+
+				for (int i = 0; i < CubeColor.values().length; i++) {
+					averageDifferences[i] = calculateAverageHueDistance(hueValues, saturationValues,
+							CubeColor.values()[i]);
 				}
-				
+
 				System.out.println(CubeColor.values()[getIndexOfMin(averageDifferences)].name());
-				
-				
+
 			}
 		}
 
@@ -77,12 +91,15 @@ public class CubeFaceRecognizer {
 		return index;
 	}
 
-	private double calculateAverageHueDistance(byte[] hueValues, int hueValue) {
+	private double calculateAverageHueDistance(byte[] hueValues, byte[] saturationValues, CubeColor cubeColor) {
 		double averageDistance = 0.0;
 		for (int i = 0; i < hueValues.length; i++) {
-			averageDistance += Math.min(Math.abs(hueValues[i] - hueValue), 180 - Math.abs(hueValues[i] - hueValue));
+			int hueValue = 0xFF & hueValues[i];
+			averageDistance += 0.5 * (Math.min(Math.abs(hueValue -cubeColor.hueValue), 180 - Math.abs(hueValue - cubeColor.hueValue)));
+			int saturationValue = 0xFF & saturationValues[i];
+			averageDistance += 0.5 * Math.abs(saturationValue - cubeColor.saturationValue);
 		}
-		averageDistance /= hueValues.length;
+		averageDistance /= saturationValues.length;
 		return averageDistance;
 	}
 
