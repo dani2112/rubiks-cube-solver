@@ -8,7 +8,7 @@ public class CubeRecognizer {
 	
 	private CubeDetector cubeDetector = new ShapeCubeDetector();
 	
-	private CubeFaceRecognizer cubeFaceRecognizer = new CubeFaceRecognizer();
+	private MeanCubeFaceRecognizer cubeFaceRecognizer = new MeanCubeFaceRecognizer();
 	
 	public void recognize(Mat frame) {
 		CubePosition cubePosition = cubeDetector.recognize(frame);

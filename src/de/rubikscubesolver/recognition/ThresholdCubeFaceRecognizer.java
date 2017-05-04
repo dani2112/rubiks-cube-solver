@@ -17,7 +17,7 @@ import de.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
 //Saturation: 255, 255, 255, 180, 160, 50
 //Value: 150, 160, 160, 240, 240, 215
 
-public class CubeFaceRecognizer {
+public class ThresholdCubeFaceRecognizer {
 
 	public enum CubeColor {
 		Blue(101, 255, 150), Red(177, 255, 160), Green(47, 255, 160), Orange(5, 180, 240), Yellow(20, 160,
