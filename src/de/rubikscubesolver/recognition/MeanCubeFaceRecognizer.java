@@ -26,22 +26,36 @@ public class MeanCubeFaceRecognizer {
 //		Mat hueChannel = channelSplit.get(1);
 		
 		
-
+		Scalar[] means = new Scalar[9];
 		List<Integer> cubePositionsY = cubePosition.cubePositionsY;
 		List<Integer> cubePositionsX = cubePosition.cubePositionsX;
 		for (int row = 0; row < cubePositionsY.size() - 1; row++) {
 			for (int col = 0; col < cubePositionsX.size() - 1; col++) {
 				System.out.println("SubCube");
-				Mat subCube = frame.submat(cubePositionsY.get(row), cubePositionsY.get(row + 1),
-						cubePositionsX.get(col), cubePositionsX.get(col + 1));
-				byte[] subCubeValues = new byte[(int) subCube.total() * 3];
-
-				subCube.get(0, 0, subCubeValues);
-
+				Mat subCube = frame.submat(cubePositionsY.get(row) + 10, cubePositionsY.get(row + 1) - 10,
+						cubePositionsX.get(col) + 10, cubePositionsX.get(col + 1) - 10);
 				
+				means[row * 3 + col] = Core.mean(subCube);
 				
 			}
 		}
+		
+		for (int i = 0; i < means.length; i++) {
+			for(int j = 0; j < means.length; j++) {
+				if(i == j) {
+					continue;
+				}
+				double distance = Math.sqrt((means[i].val[0] * means[i].val[0]) - (means[j].val[0] * means[j].val[0]) +
+						(means[i].val[1] * means[i].val[1]) - (means[j].val[1] * means[j].val[1]) +
+						(means[i].val[2] * means[i].val[2]) - (means[j].val[2] * means[j].val[2]));
+				if(distance < 50) {
+					System.out.println("------------");
+					System.out.println(i);
+					System.out.println(j);
+				}
+			}
+		}
+		
 	}
 
 }
