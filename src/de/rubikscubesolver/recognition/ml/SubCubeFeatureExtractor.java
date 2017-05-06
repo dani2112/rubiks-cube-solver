@@ -11,8 +11,9 @@ import org.opencv.imgproc.Imgproc;
 
 import de.rubikscubesolver.recognition.SlidingWindowExecutor;
 import de.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
+import libsvm.svm_node;
 
-public class SubCubeFeatureExtractor {
+public class SubCubeFeatureExtractor implements FeatureExtractor {
 
 	public double[] extractFeatures(Mat roi) {
 		if(roi.cols() < 50 || roi.rows() < 50) {
