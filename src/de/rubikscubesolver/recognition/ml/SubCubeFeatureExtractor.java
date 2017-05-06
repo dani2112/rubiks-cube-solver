@@ -44,10 +44,16 @@ public class SubCubeFeatureExtractor implements FeatureExtractor {
 
 			@Override
 			public void processRoi(int row, int col) {
-				Mat currentWindow = hsvRoi.submat(row, row + 10, col, col + 10);
+				Mat currentWindow = hsvRoi.submat(row, row + 25, col, col + 25);
+				Mat currentWindowRgb = roi.submat(row, row + 25, col, col + 25);
 				Scalar mean = Core.mean(currentWindow);
+				Scalar meanRgb = Core.mean(currentWindowRgb);
 				features.add(mean.val[0]);
 				features.add(mean.val[1]);
+				features.add(mean.val[2]);
+				features.add(meanRgb.val[0]);
+				features.add(meanRgb.val[1]);
+				features.add(meanRgb.val[2]);
 			}
         	
         });
