@@ -22,7 +22,6 @@ public class CubeFaceMLRecognizer {
 	}
 	
 	public ClassificationResult[] recognize(Mat frame, CubePosition cubePosition) {
-		System.out.println("Recognition started");
 		List<ClassificationResult> classificationResults = new ArrayList<>();
 		List<Integer> cubePositionsY = cubePosition.cubePositionsY;
 		List<Integer> cubePositionsX = cubePosition.cubePositionsX;
