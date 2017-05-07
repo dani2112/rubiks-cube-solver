@@ -14,9 +14,9 @@ public class CubeRecognizer {
 	
 	
 	/* Constructed domain model */
-	private Cube cube = null;
+	private Cube cube = new Cube();
 	
-	private CubeFace[] cubeFaces = null;
+	private CubeFace[] cubeFaces = new CubeFace[6];
 	
 	/* Recognition variables */
 	int currentCubeFaceIndex = 0;
@@ -29,7 +29,7 @@ public class CubeRecognizer {
 	
 	int isCompleteThreshold = 30;
 	
-	boolean isComplete = false;
+	boolean isCurrentCubeFaceComplete = false;
 	
 	
 	/* Helpers used for recognition */
@@ -46,13 +46,13 @@ public class CubeRecognizer {
 		currentCubeFaceIndex = 0;
 		subCubeClasses = new int[9];
 		probabilityOverThresholdCount = new int[9];
-		cube = null;
-		cubeFaces = null;
-		isComplete = true;
+		cube = new Cube();
+		cubeFaces = new CubeFace[6];
+		isCurrentCubeFaceComplete = true;
 	}
 	
-	public boolean isComplete() {
-		return isComplete;
+	public boolean isCurrentCubeFaceComplete() {
+		return isCurrentCubeFaceComplete;
 	}
 	
 	public int getCurrentCubeFaceIndex() {
@@ -68,7 +68,7 @@ public class CubeRecognizer {
 	
 	public void recognize(Mat frame) {
 		CubePosition cubePosition = cubeDetector.recognize(frame);
-		if(!isComplete && cubePosition != null) {
+		if(!isCurrentCubeFaceComplete && cubePosition != null) {
 			ClassificationResult[] classificationResults = cubeFaceRecognizer.recognize(frame, cubePosition);
 			for(int i = 0; i < classificationResults.length; i++) {
 				if(classificationResults[i].probability > probabilityThreshold) {
@@ -82,14 +82,21 @@ public class CubeRecognizer {
 				}
 			}
 			/* Completeness check */
-			boolean isComplete = true;
+			boolean isCurrentCubeFaceComplete = true;
 			for(int i = 0; i < probabilityOverThresholdCount.length; i++) {
 				if(probabilityOverThresholdCount[i] < isCompleteThreshold) {
-					isComplete = false;
+					isCurrentCubeFaceComplete = false;
 				}
 			}
-			this.isComplete = isComplete;
-			System.out.println(isComplete);
+			if(isCurrentCubeFaceComplete = true) {
+				this.isCurrentCubeFaceComplete = true;
+				cubeFaces[currentCubeFaceIndex] = new CubeFace();
+				cubeFaces[currentCubeFaceIndex].setCubeFaceId(currentCubeFaceIndex);
+				for(int i = 0; i < subCubeClasses.length; i++) {
+					cubeFaces[currentCubeFaceIndex].setSubCube(i % 3, i / 3, subCubeClasses[i]);
+				}
+			}
+			System.out.println(isCurrentCubeFaceComplete);
 		}
 	}
 
