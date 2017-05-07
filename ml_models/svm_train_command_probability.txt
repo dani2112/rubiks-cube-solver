@@ -1,0 +1,1 @@
+svm-train.exe -c 8.0 -g 0.03125 -b 1 "..\tools\test1.txt.scale" "..\tools\test1prob.txt.model"

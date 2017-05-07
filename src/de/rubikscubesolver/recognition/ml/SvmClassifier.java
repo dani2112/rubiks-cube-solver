@@ -28,6 +28,11 @@ public class SvmClassifier {
 
 	HashMap<Integer, Double[]> scalingHashMap = null;
 
+	public static class ClassificationResult {
+		public int classLabel = -1;
+		public double probability = 0.0;
+	}
+	
 	public SvmClassifier(String modelPath, String rangePath, FeatureExtractor featureExtractor) {
 		this.modelPath = modelPath;
 		this.rangePath = rangePath;
@@ -36,10 +41,10 @@ public class SvmClassifier {
 		scalingHashMap = loadScalingHashMapFromFile(rangePath);
 	}
 
-	public int classify(Mat frame) {
+	public ClassificationResult classify(Mat frame) {
 		double[] features = featureExtractor.extractFeatures(frame);
 		if(features == null) {
-			return 0;
+			return null;
 		}
 		svm_node[] featureSvmNodes = new svm_node[features.length];
 		for (int i = 0; i < features.length; i++) {
@@ -55,7 +60,12 @@ public class SvmClassifier {
 			featureSvmNodes[i] = node;
 		}
 		double classLabel = svm.svm_predict(model, featureSvmNodes);
-		return (int)classLabel;
+		double[] probEstimates = new double[svm.svm_get_nr_class(model)];
+		classLabel = svm.svm_predict_probability(model, featureSvmNodes, probEstimates);
+		ClassificationResult classificationResult = new ClassificationResult();
+		classificationResult.classLabel = (int)classLabel;
+		classificationResult.probability = probEstimates[classificationResult.classLabel - 1];
+		return classificationResult;
 	}
 
 	private static svm_model loadModelFromFile(String modelPath) {

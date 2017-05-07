@@ -1,0 +1,5 @@
+test
+Best c=32.0, g=0.0078125 CV rate=92.8826
+
+test2
+c=8.0, g=0.03125 CV rate=90.8517
