@@ -1,4 +1,4 @@
-package de.rubikscubesolver.recognition.ml;
+package de.dk_s.rubikscubesolver.recognition.ml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
-import de.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
-import de.rubikscubesolver.recognition.ml.SvmClassifier.ClassificationResult;
+import de.dk_s.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
+import de.dk_s.rubikscubesolver.recognition.ml.SvmClassifier.ClassificationResult;
 
 public class CubeFaceMLRecognizer {
 

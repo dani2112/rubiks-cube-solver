@@ -1,4 +1,4 @@
-package de.rubikscubesolver.recognition;
+package de.dk_s.rubikscubesolver.recognition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import de.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
+import de.dk_s.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
 
 public class ShapeCubeDetector implements CubeDetector {
 

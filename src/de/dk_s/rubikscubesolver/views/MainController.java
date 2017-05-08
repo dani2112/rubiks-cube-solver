@@ -5,22 +5,28 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resources;
+import javax.print.DocFlavor.URL;
+
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
-import de.rubikscubesolver.recognition.CubeRecognizer;
-import de.rubikscubesolver.recognition.ShapeCubeDetector;
+import de.dk_s.rubikscubesolver.recognition.CubeRecognizer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class MainController {
-
+	
+	/* Cube Scanning */
 	@FXML
 	private Button startCameraButton;
 	@FXML
@@ -52,7 +58,8 @@ public class MainController {
 
 	};
 
-	public MainController() {
+	@FXML
+	public void initialize()  {
 		this.cubeRecognizer = new CubeRecognizer();
 	}
 	
@@ -96,5 +103,5 @@ public class MainController {
 		Imgcodecs.imencode(".png", frame, buffer);
 		return new Image(new ByteArrayInputStream(buffer.toArray()));
 	}
-
+	
 }

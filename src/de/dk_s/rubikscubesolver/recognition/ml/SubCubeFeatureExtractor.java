@@ -1,4 +1,4 @@
-package de.rubikscubesolver.recognition.ml;
+package de.dk_s.rubikscubesolver.recognition.ml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import de.rubikscubesolver.recognition.SlidingWindowExecutor;
-import de.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
+import de.dk_s.rubikscubesolver.recognition.SlidingWindowExecutor;
+import de.dk_s.rubikscubesolver.recognition.SlidingWindowExecutor.SlidingWindowAlgorithm;
 import libsvm.svm_node;
 
 public class SubCubeFeatureExtractor implements FeatureExtractor {

@@ -1,4 +1,4 @@
-package de.rubikscubesolver.recognition.ml;
+package de.dk_s.rubikscubesolver.recognition.ml;
 
 import org.opencv.core.Mat;
 

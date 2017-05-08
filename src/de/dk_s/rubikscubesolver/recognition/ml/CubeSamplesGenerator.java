@@ -1,4 +1,4 @@
-package de.rubikscubesolver.recognition.ml;
+package de.dk_s.rubikscubesolver.recognition.ml;
 
 import java.io.File;
 import java.util.List;
@@ -10,9 +10,9 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
-import de.rubikscubesolver.recognition.CubeDetector;
-import de.rubikscubesolver.recognition.ShapeCubeDetector;
-import de.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
+import de.dk_s.rubikscubesolver.recognition.CubeDetector;
+import de.dk_s.rubikscubesolver.recognition.ShapeCubeDetector;
+import de.dk_s.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
 
 public class CubeSamplesGenerator {
 

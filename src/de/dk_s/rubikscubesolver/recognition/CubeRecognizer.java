@@ -1,4 +1,4 @@
-package de.rubikscubesolver.recognition;
+package de.dk_s.rubikscubesolver.recognition;
 
 import java.util.Arrays;
 
@@ -6,9 +6,9 @@ import org.opencv.core.Mat;
 
 import de.dk_s.rubikscubesolver.domain.Cube;
 import de.dk_s.rubikscubesolver.domain.CubeFace;
-import de.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
-import de.rubikscubesolver.recognition.ml.CubeFaceMLRecognizer;
-import de.rubikscubesolver.recognition.ml.SvmClassifier.ClassificationResult;
+import de.dk_s.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
+import de.dk_s.rubikscubesolver.recognition.ml.CubeFaceMLRecognizer;
+import de.dk_s.rubikscubesolver.recognition.ml.SvmClassifier.ClassificationResult;
 
 public class CubeRecognizer {
 	
@@ -93,7 +93,7 @@ public class CubeRecognizer {
 				cubeFaces[currentCubeFaceIndex] = new CubeFace();
 				cubeFaces[currentCubeFaceIndex].setCubeFaceId(currentCubeFaceIndex);
 				for(int i = 0; i < subCubeClasses.length; i++) {
-					cubeFaces[currentCubeFaceIndex].setSubCube(i % 3, i / 3, subCubeClasses[i]);
+					cubeFaces[currentCubeFaceIndex].setSubCubeColor(i % 3, i / 3, subCubeClasses[i]);
 				}
 			}
 			System.out.println(isCurrentCubeFaceComplete);
