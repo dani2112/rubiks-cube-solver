@@ -10,8 +10,12 @@ public class CubeFace {
 		this.cubeFaceId = id;
 	}
 	
+	public int getSubCubeColor(int x, int y) {
+		return subCubes[x][y];
+	}
+	
 	// Origin is left upper corner
-	public void setSubCube(int x, int y, int color) {
+	public void setSubCubeColor(int x, int y, int color) {
 		subCubes[x][y] = color;
 	}
 	

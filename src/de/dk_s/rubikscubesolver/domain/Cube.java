@@ -5,6 +5,10 @@ public class Cube {
 	private CubeFace[] cubeFaces = new CubeFace[6];
 	
 	public Cube() {
+		initializeCubeFaces();
+	}
+	
+	private void initializeCubeFaces() {
 		
 	}
 	
