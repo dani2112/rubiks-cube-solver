@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -23,7 +24,7 @@ public class Main extends Application {
             
             
             BorderPane mainLayout = (BorderPane) loader.load();
-            Scene scene = new Scene(mainLayout, 800, 600);
+            Scene scene = new Scene(mainLayout, 1280, 600, Color.ALICEBLUE);
             
             scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             

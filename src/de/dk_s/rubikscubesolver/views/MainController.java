@@ -13,25 +13,43 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+import de.dk_s.rubikscubesolver.domain.Cube;
 import de.dk_s.rubikscubesolver.recognition.CubeRecognizer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 public class MainController {
+	
+	/* Cube Model */
+	private Cube cube;
 	
 	/* Cube Scanning */
 	@FXML
 	private Button startCameraButton;
 	@FXML
 	private ImageView currentFrameView;
+	
+	/* Animation */
+	@FXML
+	private SubScene subScene;
+	
+	private CubeRenderer cubeRenderer;
 
+	/* Video capture */
 	private boolean isInputStarted = false;
 	
 	private VideoCapture videoCapture = null;
@@ -58,9 +76,14 @@ public class MainController {
 
 	};
 
+	private final Rotate rotateX = new Rotate(-20, Rotate.X_AXIS);
+	private final Rotate rotateY = new Rotate(-20, Rotate.Y_AXIS);
+	
 	@FXML
 	public void initialize()  {
+		this.cube = new Cube();
 		this.cubeRecognizer = new CubeRecognizer();
+		this.cubeRenderer = new CubeRenderer(subScene, cube);
 	}
 	
 	@FXML

@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.SceneAntialiasing?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.dk_s.rubikscubesolver.views.MainController">
    <bottom>
       <Button fx:id="startCameraButton" mnemonicParsing="false" onAction="#startCamera" text="Start Camera" BorderPane.alignment="CENTER" />
    </bottom>
+   <right>
+      <SubScene fx:id="subScene" height="480.0" width="640.0" depthBuffer="true" BorderPane.alignment="CENTER">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+   </right>
    <center>
       <ImageView fx:id="currentFrameView" fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
