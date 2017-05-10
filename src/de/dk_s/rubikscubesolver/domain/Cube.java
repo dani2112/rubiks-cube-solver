@@ -9,7 +9,9 @@ public class Cube {
 	}
 	
 	private void initializeCubeFaces() {
-		
+		for(int i = 0; i < cubeFaces.length; i++) {
+			cubeFaces[i] = new CubeFace();
+		}
 	}
 	
 	public CubeFace getCubeFace(int index) {

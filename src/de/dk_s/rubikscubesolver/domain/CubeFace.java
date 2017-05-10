@@ -6,6 +6,7 @@ public class CubeFace {
 	
 	private int[][] subCubes = new int[3][3];
 	
+	
 	public void setCubeFaceId(int id) {
 		this.cubeFaceId = id;
 	}
