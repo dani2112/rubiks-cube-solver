@@ -6,6 +6,7 @@ import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.PointLight;
 import javafx.scene.SubScene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
@@ -80,31 +81,40 @@ public class CubeRenderer {
 				for (int x = 0; x < 3; x++) {
 					int color = cubeFace.getSubCubeColor(x, y);
 					MeshView rectangle = new MeshView(new Shape3DRectangle(size / 3, size / 3));
+					PhongMaterial material = new PhongMaterial();
+					material.setSpecularColor(Color.WHITE);
 					switch (color) {
 					case 0:
-						rectangle.setMaterial(new PhongMaterial(Color.GRAY));
+						material.setDiffuseColor(Color.GRAY);
+						rectangle.setMaterial(material);
 						break;
 					case 1:
-						rectangle.setMaterial(new PhongMaterial(Color.BLUE));
+						material.setDiffuseColor(Color.BLUE);
+						rectangle.setMaterial(material);
 						break;
 					case 2:
-						rectangle.setMaterial(new PhongMaterial(Color.RED));
+						material.setDiffuseColor(Color.RED);
+						rectangle.setMaterial(material);
 						break;
 					case 3:
-						rectangle.setMaterial(new PhongMaterial(Color.GREEN));
+						material.setDiffuseColor(Color.GREEN);
+						rectangle.setMaterial(material);
 						break;
 					case 4:
-						rectangle.setMaterial(new PhongMaterial(Color.ORANGE));
+						material.setDiffuseColor(Color.ORANGE);
+						rectangle.setMaterial(material);
 						break;
 					case 5:
-						rectangle.setMaterial(new PhongMaterial(Color.YELLOW));
+						material.setDiffuseColor(Color.YELLOW);
+						rectangle.setMaterial(material);
 						break;
 					case 6:
-						rectangle.setMaterial(new PhongMaterial(Color.WHITE));
+						material.setDiffuseColor(Color.WHITE);
+						rectangle.setMaterial(material);
 						break;
 					}
-					rectangle.setTranslateX((-0.5 * size) + x * (size / 3));
-					rectangle.setTranslateY((-0.5 * size) + y * (size / 3));
+					rectangle.setTranslateX((-(size/3)) + x * (size / 3));
+					rectangle.setTranslateY((-(size/3)) + y * (size / 3));
 					getChildren().addAll(rectangle);
 				}
 			}
@@ -123,10 +133,6 @@ public class CubeRenderer {
 		PerspectiveCamera camera = new PerspectiveCamera(true);
 		float size = 10.0f;
 		camera.getTransforms().addAll(rotateX, rotateY, new Translate(0, 0, -30));
-		final MeshView rect = new MeshView(
-                new Shape3DRectangle(10, 10)
-        );
-		rect.setMaterial(new PhongMaterial(Color.DARKGREEN));
 		/* Yellow */
 		CubeFaceGraphics frontFace = new CubeFaceGraphics(size, cube.getCubeFace(0));
 		/* Orange */
@@ -162,10 +168,13 @@ public class CubeRenderer {
 		bottomFace.setTranslateY(size * -0.5);
 		bottomFace.setTranslateZ(size * 0.5);
 		
+		PointLight light = new PointLight(Color.WHITE);
+		light.setTranslateZ(-20.0f);
+		light.setTranslateX(10.0f);
 		
-		Group root3D = new Group(camera, frontFace, rightFace, backFace, leftFace, topFace, bottomFace);
+		Group root3D = new Group(camera, frontFace, rightFace, backFace, leftFace, topFace, bottomFace, light);
 		scene.setRoot(root3D);
-		scene.setFill(Color.AQUA);
+		scene.setFill(Color.WHITE);
 		scene.setCamera(camera);
 	}
 
