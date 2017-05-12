@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
 import javafx.scene.SubScene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.Paint;
@@ -29,10 +30,13 @@ public class CubeRenderer {
 	private SubScene scene;
 
 	private Group root3D;
+	
+	private final Rotate rotateX = new Rotate(0, Rotate.X_AXIS);
+	private final Rotate rotateY = new Rotate(0, Rotate.Y_AXIS);
 
-	private final Rotate rotateX = new Rotate(-20, Rotate.X_AXIS);
-	private final Rotate rotateY = new Rotate(-20, Rotate.Y_AXIS);
-
+	private double mousePosX, mousePosY;
+	private double mouseOldX, mouseOldY;
+	
 	private CubeFaceGraphics frontFace;
 
 	private CubeFaceGraphics rightFace;
@@ -210,6 +214,19 @@ public class CubeRenderer {
 		scene.setRoot(root3D);
 		scene.setFill(Color.WHITE);
 		scene.setCamera(camera);
+		
+		 scene.setOnMousePressed((MouseEvent me) -> {
+		        mouseOldX = me.getSceneX();
+		        mouseOldY = me.getSceneY();
+		    });
+		    scene.setOnMouseDragged((MouseEvent me) -> {
+		        mousePosX = me.getSceneX();
+		        mousePosY = me.getSceneY();
+		        rotateX.setAngle(rotateX.getAngle()-(mousePosY - mouseOldY));
+		        rotateY.setAngle(rotateY.getAngle()+(mousePosX - mouseOldX));
+		        mouseOldX = mousePosX;
+		        mouseOldY = mousePosY;
+		    });
 	}
 
 }
