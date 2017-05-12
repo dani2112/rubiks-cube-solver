@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -9,11 +10,8 @@
 <?import javafx.scene.SceneAntialiasing?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.dk_s.rubikscubesolver.views.MainController">
-   <bottom>
-      <Button fx:id="startCameraButton" mnemonicParsing="false" onAction="#startCamera" text="Start Camera" BorderPane.alignment="CENTER" />
-   </bottom>
    <right>
-      <SubScene fx:id="subScene" height="480.0" width="640.0" depthBuffer="true" BorderPane.alignment="CENTER">
+      <SubScene fx:id="subScene" depthBuffer="true" height="480.0" width="640.0" BorderPane.alignment="CENTER">
         <root>
           <Region />
         </root>
@@ -22,4 +20,19 @@
    <center>
       <ImageView fx:id="currentFrameView" fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="startScanButton" mnemonicParsing="false" onAction="#startScan" text="Start Scan">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin>
+            </Button>
+            <ChoiceBox fx:id="colorChoiceBox" prefWidth="150.0" />
+         </children>
+         <padding>
+            <Insets left="15.0" right="15.0" />
+         </padding>
+      </HBox>
+   </top>
 </BorderPane>

@@ -16,6 +16,9 @@ import org.opencv.videoio.VideoCapture;
 import de.dk_s.rubikscubesolver.domain.Cube;
 import de.dk_s.rubikscubesolver.recognition.CubeRecognizer;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -24,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -39,9 +43,13 @@ public class MainController {
 	
 	/* Cube Scanning */
 	@FXML
-	private Button startCameraButton;
+	private Button startScanButton;
 	@FXML
 	private ImageView currentFrameView;
+	@FXML
+	private ChoiceBox<String> colorChoiceBox;
+	
+	private int selectedFaceId = 0;
 	
 	/* Animation */
 	@FXML
@@ -81,30 +89,47 @@ public class MainController {
 	
 	@FXML
 	public void initialize()  {
+		/* Initialize color selection ChoiceBox */
+		colorChoiceBox.setItems(FXCollections.observableArrayList("Yellow", "Orange", "White", "Red", "Blue", "Green"));
+		
+		colorChoiceBox.getSelectionModel().selectedIndexProperty()
+        .addListener(new ChangeListener<Number>() {
+          public void changed(ObservableValue ov, Number value, Number newValue) {
+        	  selectedFaceId = newValue.intValue();
+          }
+        });
+		
 		this.cube = new Cube();
 		this.cubeRecognizer = new CubeRecognizer();
 		this.cubeRenderer = new CubeRenderer(subScene, cube);
 	}
 	
 	@FXML
-	protected void startCamera(ActionEvent event) {
+	protected void startScan(ActionEvent event) {
 		if(isInputStarted) {
-			
-			try {
-				executor.shutdown();
-				executor.awaitTermination(100, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				System.out.println("Could not shutdown frame Capture!");
-			}
-			isInputStarted = false;
+			stopScan();
 		} else {
-			videoCapture = new VideoCapture(1);
-			if (this.videoCapture.isOpened()) {
-				executor = Executors.newSingleThreadScheduledExecutor();
-				executor.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-			}
-			isInputStarted = true;
+			startScan();
 		}
+	}
+	
+	private void startScan() {
+		videoCapture = new VideoCapture(1);
+		if (this.videoCapture.isOpened()) {
+			executor = Executors.newSingleThreadScheduledExecutor();
+			executor.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+		}
+		isInputStarted = true;
+	}
+	
+	private void stopScan() {
+		try {
+			executor.shutdown();
+			executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			System.out.println("Could not shutdown frame Capture!");
+		}
+		isInputStarted = false;
 	}
 
 	public void setClosed() {
