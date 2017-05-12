@@ -42,7 +42,6 @@ public class CubeRecognizer extends Observable {
 	}
 	
 	public void reset() {
-		currentCubeFaceIndex = 0;
 		subCubeClasses = new int[9];
 		probabilityOverThresholdCount = new int[9];
 		isCurrentCubeFaceComplete = false;
