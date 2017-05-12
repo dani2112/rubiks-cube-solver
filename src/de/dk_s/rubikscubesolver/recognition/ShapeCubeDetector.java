@@ -126,7 +126,7 @@ public class ShapeCubeDetector implements CubeDetector {
 						double areaValue = getAreaValue(row, col, rectangleRows2, rectangleCols2, integralImage2.cols(),
 								integralValues2);
 
-						if (areaValue > 60000) {
+						if (areaValue > 50000) {
 							highGradientYRows.add(row);
 						}
 					}
