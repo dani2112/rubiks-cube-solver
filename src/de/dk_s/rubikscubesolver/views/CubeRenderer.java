@@ -206,11 +206,11 @@ public class CubeRenderer {
 		float size = 10.0f;
 		camera.getTransforms().addAll(rotateX, rotateY, new Translate(0, 0, -30));
 
-		PointLight light = new PointLight(Color.WHITE);
-		light.setTranslateZ(-20.0f);
-		light.setTranslateX(10.0f);
+//		PointLight light = new PointLight(Color.WHITE);
+//		light.setTranslateZ(0f);
+//		light.setTranslateX(20.0f);
 
-		root3D = new Group(camera, light);
+		root3D = new Group(camera);
 		scene.setRoot(root3D);
 		scene.setFill(Color.WHITE);
 		scene.setCamera(camera);
