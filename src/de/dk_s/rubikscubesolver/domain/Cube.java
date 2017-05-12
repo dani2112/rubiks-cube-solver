@@ -1,6 +1,8 @@
 package de.dk_s.rubikscubesolver.domain;
 
-public class Cube {
+import java.util.Observable;
+
+public class Cube extends Observable {
 
 	private CubeFace[] cubeFaces = new CubeFace[6];
 	
@@ -19,6 +21,8 @@ public class Cube {
 	}
 	
 	public void setCubeFace(int index, CubeFace cubeFace) {
+		setChanged();
+		notifyObservers("facesUpdated");
 		cubeFaces[index] = cubeFace;
 	}
 	

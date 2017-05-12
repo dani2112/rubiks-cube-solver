@@ -1,6 +1,8 @@
 package de.dk_s.rubikscubesolver.views;
 
 import java.io.ByteArrayInputStream;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -71,7 +73,13 @@ public class MainController {
 		@Override
 		public void run() {
 			Mat frame = getNextFrame(videoCapture);
-			cubeRecognizer.recognize(frame);
+			
+			try {
+				cubeRecognizer.recognize(frame);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Image frameImage = mat2Image(frame);
 			Platform.runLater(new Runnable() {
 				public void run() {
@@ -89,6 +97,20 @@ public class MainController {
 	
 	@FXML
 	public void initialize()  {
+		this.cube = new Cube();
+		this.cubeRecognizer = new CubeRecognizer(cube);
+		cubeRecognizer.addObserver(new Observer() {
+
+			@Override
+			public void update(Observable arg0, Object cmd) {
+				String command = (String)cmd;
+				//stopScan();
+			}
+			
+		});
+		
+		this.cubeRenderer = new CubeRenderer(subScene, cube);
+		
 		/* Initialize color selection ChoiceBox */
 		colorChoiceBox.setItems(FXCollections.observableArrayList("Yellow", "Orange", "White", "Red", "Blue", "Green"));
 		
@@ -96,12 +118,11 @@ public class MainController {
         .addListener(new ChangeListener<Number>() {
           public void changed(ObservableValue ov, Number value, Number newValue) {
         	  selectedFaceId = newValue.intValue();
+        	  cubeRecognizer.setCurrentCubeFaceIndex(selectedFaceId);
+        	  cubeRecognizer.reset();
           }
         });
 		
-		this.cube = new Cube();
-		this.cubeRecognizer = new CubeRecognizer();
-		this.cubeRenderer = new CubeRenderer(subScene, cube);
 	}
 	
 	@FXML

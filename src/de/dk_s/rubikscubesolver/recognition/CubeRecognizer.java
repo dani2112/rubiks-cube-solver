@@ -1,6 +1,7 @@
 package de.dk_s.rubikscubesolver.recognition;
 
 import java.util.Arrays;
+import java.util.Observable;
 
 import org.opencv.core.Mat;
 
@@ -10,13 +11,11 @@ import de.dk_s.rubikscubesolver.recognition.ShapeCubeDetector.CubePosition;
 import de.dk_s.rubikscubesolver.recognition.ml.CubeFaceMLRecognizer;
 import de.dk_s.rubikscubesolver.recognition.ml.SvmClassifier.ClassificationResult;
 
-public class CubeRecognizer {
+public class CubeRecognizer extends Observable {
 	
 	
 	/* Constructed domain model */
-	private Cube cube = new Cube();
-	
-	private CubeFace[] cubeFaces = new CubeFace[6];
+	private Cube cube;
 	
 	/* Recognition variables */
 	int currentCubeFaceIndex = 0;
@@ -38,17 +37,15 @@ public class CubeRecognizer {
 	private CubeFaceMLRecognizer cubeFaceRecognizer = new CubeFaceMLRecognizer();
 	
 	
-	public CubeRecognizer() {
-		
+	public CubeRecognizer(Cube cube) {
+		this.cube = cube;
 	}
 	
 	public void reset() {
 		currentCubeFaceIndex = 0;
 		subCubeClasses = new int[9];
 		probabilityOverThresholdCount = new int[9];
-		cube = new Cube();
-		cubeFaces = new CubeFace[6];
-		isCurrentCubeFaceComplete = true;
+		isCurrentCubeFaceComplete = false;
 	}
 	
 	public boolean isCurrentCubeFaceComplete() {
@@ -61,8 +58,7 @@ public class CubeRecognizer {
 	
 	public void setCurrentCubeFaceIndex(int index) {
 		/* Reset recognition variables */
-		subCubeClasses = new int[9];
-		probabilityOverThresholdCount = new int[9];
+		reset();
 		currentCubeFaceIndex = index;
 	}
 	
@@ -71,6 +67,9 @@ public class CubeRecognizer {
 		if(!isCurrentCubeFaceComplete && cubePosition != null) {
 			ClassificationResult[] classificationResults = cubeFaceRecognizer.recognize(frame, cubePosition);
 			for(int i = 0; i < classificationResults.length; i++) {
+				if(classificationResults[i] == null) {
+					continue;
+				}
 				if(classificationResults[i].probability > probabilityThreshold) {
 					if(subCubeClasses[i] == classificationResults[i].classLabel) {
 						probabilityOverThresholdCount[i]++;
@@ -88,15 +87,17 @@ public class CubeRecognizer {
 					isCurrentCubeFaceComplete = false;
 				}
 			}
-			if(isCurrentCubeFaceComplete = true) {
+			if(isCurrentCubeFaceComplete == true) {
 				this.isCurrentCubeFaceComplete = true;
-				cubeFaces[currentCubeFaceIndex] = new CubeFace();
-				cubeFaces[currentCubeFaceIndex].setCubeFaceId(currentCubeFaceIndex);
+				CubeFace cubeFaceNew = new CubeFace();
+				cubeFaceNew.setCubeFaceId(currentCubeFaceIndex);
 				for(int i = 0; i < subCubeClasses.length; i++) {
-					cubeFaces[currentCubeFaceIndex].setSubCubeColor(i % 3, i / 3, subCubeClasses[i]);
+					cubeFaceNew.setSubCubeColor(i % 3, i / 3, subCubeClasses[i]);
 				}
+				cube.setCubeFace(currentCubeFaceIndex, cubeFaceNew);
 			}
-			System.out.println(isCurrentCubeFaceComplete);
+			setChanged();
+			notifyObservers("faceComplete");
 		}
 	}
 

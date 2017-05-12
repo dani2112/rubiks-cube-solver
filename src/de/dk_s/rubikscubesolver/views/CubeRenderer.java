@@ -1,5 +1,8 @@
 package de.dk_s.rubikscubesolver.views;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import de.dk_s.rubikscubesolver.domain.Cube;
 import de.dk_s.rubikscubesolver.domain.CubeFace;
 import javafx.application.ConditionalFeature;
@@ -22,31 +25,37 @@ import javafx.scene.transform.Translate;
 
 public class CubeRenderer {
 
+	/* Rendering variables */
 	private SubScene scene;
 
-	private Cube cube;
+	private Group root3D;
 
 	private final Rotate rotateX = new Rotate(-20, Rotate.X_AXIS);
 	private final Rotate rotateY = new Rotate(-20, Rotate.Y_AXIS);
 
+	private CubeFaceGraphics frontFace;
+
+	private CubeFaceGraphics rightFace;
+
+	private CubeFaceGraphics backFace;
+
+	private CubeFaceGraphics leftFace;
+
+	private CubeFaceGraphics topFace;
+
+	private CubeFaceGraphics bottomFace;
+
+	/* Domain variables */
+	private Cube cube;
+
 	public class Shape3DRectangle extends TriangleMesh {
 
 		public Shape3DRectangle(float width, float height) {
-			float[] points = { -width / 2, height / 2, 0,
-					-width / 2, -height / 2, 0,
-					width / 2, height / 2, 0,
-					width / 2, -height / 2, 0 
-			};
-			float[] texCoords = { 1, 1,
-					1, 0,
-					0, 1,
-					0, 0
-			};
+			float[] points = { -width / 2, height / 2, 0, -width / 2, -height / 2, 0, width / 2, height / 2, 0,
+					width / 2, -height / 2, 0 };
+			float[] texCoords = { 1, 1, 1, 0, 0, 1, 0, 0 };
 
-			 int[] faces = {
-			 2, 2, 1, 1, 0, 0,
-			 2, 2, 3, 3, 1, 1
-			 };
+			int[] faces = { 2, 2, 1, 1, 0, 0, 2, 2, 3, 3, 1, 1 };
 
 			this.getPoints().setAll(points);
 			this.getTexCoords().setAll(texCoords);
@@ -113,8 +122,8 @@ public class CubeRenderer {
 						rectangle.setMaterial(material);
 						break;
 					}
-					rectangle.setTranslateX((-(size/3)) + x * (size / 3));
-					rectangle.setTranslateY((-(size/3)) + y * (size / 3));
+					rectangle.setTranslateX((-(size / 3)) + x * (size / 3));
+					rectangle.setTranslateY((-(size / 3)) + y * (size / 3));
 					getChildren().addAll(rectangle);
 				}
 			}
@@ -126,53 +135,78 @@ public class CubeRenderer {
 	public CubeRenderer(SubScene scene, Cube cube) {
 		this.scene = scene;
 		this.cube = cube;
+		cube.addObserver(new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+
+				Platform.runLater(new Runnable() {
+
+					@Override
+					public void run() {
+						render();
+					}
+				});
+
+			}
+
+		});
 		initialize();
+		render();
+	}
+
+	private void render() {
+		root3D.getChildren().removeAll(frontFace, rightFace, backFace, leftFace, topFace, bottomFace);
+
+		float size = 10.0f;
+		/* Yellow */
+		frontFace = new CubeFaceGraphics(size, cube.getCubeFace(0));
+		/* Orange */
+		rightFace = new CubeFaceGraphics(size, cube.getCubeFace(1));
+		rightFace.setRotationAxis(Rotate.Y_AXIS);
+		rightFace.setRotate(-90.0f);
+		rightFace.setTranslateX(size * 0.5);
+		rightFace.setTranslateZ(size * 0.5);
+		/* White */
+		backFace = new CubeFaceGraphics(size, cube.getCubeFace(2));
+		backFace.setRotationAxis(Rotate.X_AXIS);
+		backFace.setRotate(180.0);
+		backFace.setTranslateZ(size * 0.5);
+
+		/* Red */
+		leftFace = new CubeFaceGraphics(size, cube.getCubeFace(3));
+		leftFace.setRotationAxis(Rotate.Y_AXIS);
+		leftFace.setRotate(90.0f);
+		leftFace.setTranslateX(-size * 0.5);
+		leftFace.setTranslateZ(size * 0.5);
+
+		/* Blue */
+		topFace = new CubeFaceGraphics(size, cube.getCubeFace(4));
+		topFace.setRotationAxis(Rotate.X_AXIS);
+		topFace.setRotate(-90.0);
+		topFace.setTranslateY(size * -0.5);
+		topFace.setTranslateZ(size * 0.5);
+
+		/* Green */
+		bottomFace = new CubeFaceGraphics(size, cube.getCubeFace(5));
+		bottomFace.setRotationAxis(Rotate.X_AXIS);
+		bottomFace.setRotate(90.0);
+		bottomFace.setTranslateY(size * -0.5);
+		bottomFace.setTranslateZ(size * 0.5);
+
+		root3D.getChildren().addAll(frontFace, rightFace, backFace, leftFace, topFace, bottomFace);
 	}
 
 	private void initialize() {
 		PerspectiveCamera camera = new PerspectiveCamera(true);
 		float size = 10.0f;
 		camera.getTransforms().addAll(rotateX, rotateY, new Translate(0, 0, -30));
-		/* Yellow */
-		CubeFaceGraphics frontFace = new CubeFaceGraphics(size, cube.getCubeFace(0));
-		/* Orange */
-		CubeFaceGraphics rightFace = new CubeFaceGraphics(size, cube.getCubeFace(1));
-		rightFace.setRotationAxis(Rotate.Y_AXIS);
-		rightFace.setRotate(-90.0f);
-		rightFace.setTranslateX(size * 0.5);
-		rightFace.setTranslateZ(size * 0.5);
-		/* White */
-		CubeFaceGraphics backFace = new CubeFaceGraphics(size, cube.getCubeFace(2));
-		backFace.setRotationAxis(Rotate.X_AXIS);
-		backFace.setRotate(180.0);
-		backFace.setTranslateZ(size * 0.5);
-		
-		/* Red */
-		CubeFaceGraphics leftFace = new CubeFaceGraphics(size, cube.getCubeFace(3));
-		leftFace.setRotationAxis(Rotate.Y_AXIS);
-		leftFace.setRotate(90.0f);
-		leftFace.setTranslateX(-size * 0.5);
-		leftFace.setTranslateZ(size * 0.5);
-		
-		/* Blue */
-		CubeFaceGraphics topFace = new CubeFaceGraphics(size, cube.getCubeFace(4));
-		topFace.setRotationAxis(Rotate.X_AXIS);
-		topFace.setRotate(-90.0);
-		topFace.setTranslateY(size * -0.5);
-		topFace.setTranslateZ(size * 0.5);
-		
-		/* Green */
-		CubeFaceGraphics bottomFace = new CubeFaceGraphics(size, cube.getCubeFace(5));
-		bottomFace.setRotationAxis(Rotate.X_AXIS);
-		bottomFace.setRotate(90.0);
-		bottomFace.setTranslateY(size * -0.5);
-		bottomFace.setTranslateZ(size * 0.5);
-		
+
 		PointLight light = new PointLight(Color.WHITE);
 		light.setTranslateZ(-20.0f);
 		light.setTranslateX(10.0f);
-		
-		Group root3D = new Group(camera, frontFace, rightFace, backFace, leftFace, topFace, bottomFace, light);
+
+		root3D = new Group(camera, light);
 		scene.setRoot(root3D);
 		scene.setFill(Color.WHITE);
 		scene.setCamera(camera);
