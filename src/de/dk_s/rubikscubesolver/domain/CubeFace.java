@@ -23,4 +23,32 @@ public class CubeFace {
 		subCubes[x][y] = color;
 	}
 	
+	public int[] getCol(int x) {
+		int[] col = new int[3];
+		for(int i = 0; i < 3; i++) {
+			col[i] = subCubes[x][i];
+		}
+		return col;
+	}
+	
+	public void setCol(int x, int[] col) {
+		for(int i = 0; i < 3; i++) {
+			subCubes[x][i] = col[i];
+		}
+	}
+	
+	public int[] getRow(int y) {
+		int[] row = new int[3];
+		for(int i = 0; i < 3; i++) {
+			row[i] = subCubes[i][y];
+		}
+		return row;
+	}
+	
+	public void setRow(int y, int[] row) {
+		for(int i = 0; i < 3; i++) {
+			subCubes[i][y] = row[i];
+		}
+	}
+	
 }
