@@ -113,7 +113,7 @@ public class MainController {
 		this.cubeRenderer = new CubeRenderer(subScene, cube);
 		
 		/* Initialize color selection ChoiceBox */
-		colorChoiceBox.setItems(FXCollections.observableArrayList("Yellow", "Orange", "White", "Red", "Blue", "Green"));
+		colorChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red", "Blue", "Orange", "White", "Yellow"));
 		
 		colorChoiceBox.getSelectionModel().selectedIndexProperty()
         .addListener(new ChangeListener<Number>() {

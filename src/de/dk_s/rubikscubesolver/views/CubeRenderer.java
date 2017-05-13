@@ -163,37 +163,37 @@ public class CubeRenderer {
 		root3D.getChildren().removeAll(frontFace, rightFace, backFace, leftFace, topFace, bottomFace);
 
 		float size = 10.0f;
-		/* Yellow */
+		/* Green */
 		frontFace = new CubeFaceGraphics(size, cube.getCubeFace(0));
 		frontFace.setTranslateZ(-size*0.5);
 		
-		/* Orange */
+		/* Red */
 		rightFace = new CubeFaceGraphics(size, cube.getCubeFace(1));
 		rightFace.setRotationAxis(Rotate.Y_AXIS);
 		rightFace.setRotate(-90.0f);
 		rightFace.setTranslateX(size * 0.5);
 		rightFace.setTranslateZ(0);
-		/* White */
+		/* Blue */
 		backFace = new CubeFaceGraphics(size, cube.getCubeFace(2));
 		backFace.setRotationAxis(Rotate.Y_AXIS);
 		backFace.setRotate(180.0);
 		backFace.setTranslateZ(size * 0.5);
 
-		/* Red */
+		/* Orange */
 		leftFace = new CubeFaceGraphics(size, cube.getCubeFace(3));
 		leftFace.setRotationAxis(Rotate.Y_AXIS);
 		leftFace.setRotate(90.0f);
 		leftFace.setTranslateX(-size * 0.5);
 		leftFace.setTranslateZ(0);
 
-		/* Blue */
+		/* White */
 		topFace = new CubeFaceGraphics(size, cube.getCubeFace(4));
 		topFace.setRotationAxis(Rotate.X_AXIS);
 		topFace.setRotate(-90.0);
 		topFace.setTranslateY(size * -0.5);
 		topFace.setTranslateZ(0);
 
-		/* Green */
+		/* Yellow */
 		bottomFace = new CubeFaceGraphics(size, cube.getCubeFace(5));
 		bottomFace.setRotationAxis(Rotate.X_AXIS);
 		bottomFace.setRotate(90.0);
