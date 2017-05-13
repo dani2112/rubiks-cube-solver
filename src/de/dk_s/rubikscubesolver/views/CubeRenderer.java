@@ -95,7 +95,7 @@ public class CubeRenderer {
 					int color = cubeFace.getSubCubeColor(x, y);
 					MeshView rectangle = new MeshView(new Shape3DRectangle(size / 3, size / 3));
 					PhongMaterial material = new PhongMaterial();
-					material.setSpecularColor(Color.WHITE);
+					//material.setSpecularColor(Color.WHITE);
 					switch (color) {
 					case 0:
 						material.setDiffuseColor(Color.GRAY);
@@ -165,38 +165,40 @@ public class CubeRenderer {
 		float size = 10.0f;
 		/* Yellow */
 		frontFace = new CubeFaceGraphics(size, cube.getCubeFace(0));
+		frontFace.setTranslateZ(-size*0.5);
+		
 		/* Orange */
 		rightFace = new CubeFaceGraphics(size, cube.getCubeFace(1));
 		rightFace.setRotationAxis(Rotate.Y_AXIS);
 		rightFace.setRotate(-90.0f);
 		rightFace.setTranslateX(size * 0.5);
-		rightFace.setTranslateZ(size * 0.5);
+		rightFace.setTranslateZ(0);
 		/* White */
 		backFace = new CubeFaceGraphics(size, cube.getCubeFace(2));
 		backFace.setRotationAxis(Rotate.Y_AXIS);
 		backFace.setRotate(180.0);
-		backFace.setTranslateZ(size);
+		backFace.setTranslateZ(size * 0.5);
 
 		/* Red */
 		leftFace = new CubeFaceGraphics(size, cube.getCubeFace(3));
 		leftFace.setRotationAxis(Rotate.Y_AXIS);
 		leftFace.setRotate(90.0f);
 		leftFace.setTranslateX(-size * 0.5);
-		leftFace.setTranslateZ(size * 0.5);
+		leftFace.setTranslateZ(0);
 
 		/* Blue */
 		topFace = new CubeFaceGraphics(size, cube.getCubeFace(4));
 		topFace.setRotationAxis(Rotate.X_AXIS);
 		topFace.setRotate(-90.0);
 		topFace.setTranslateY(size * -0.5);
-		topFace.setTranslateZ(size * 0.5);
+		topFace.setTranslateZ(0);
 
 		/* Green */
 		bottomFace = new CubeFaceGraphics(size, cube.getCubeFace(5));
 		bottomFace.setRotationAxis(Rotate.X_AXIS);
 		bottomFace.setRotate(90.0);
 		bottomFace.setTranslateY(size * 0.5);
-		bottomFace.setTranslateZ(size * 0.5);
+		bottomFace.setTranslateZ(0);
 
 		root3D.getChildren().addAll(frontFace, rightFace, backFace, leftFace, topFace, bottomFace);
 	}
