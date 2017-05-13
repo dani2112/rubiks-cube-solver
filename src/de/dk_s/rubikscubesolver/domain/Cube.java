@@ -26,75 +26,76 @@ public class Cube extends Observable {
 		cubeFaces[index] = cubeFace;
 	}
 	
-	public void F() {
+	public void turnF() {
+		int[] redRow = cubeFaces[1].getCol(0);
+		cubeFaces[5].setRow(1, redRow);
+	}
+	
+	public void turnFI() {
 		
 	}
 	
-	public void FI() {
+	public void turnF2() {
 		
 	}
 	
-	public void F2() {
+	public void turnB() {
 		
 	}
 	
-	public void B() {
+	public void turnBI() {
 		
 	}
 	
-	public void BI() {
+	public void turnB2() {
 		
 	}
 	
-	public void B2() {
+	public void turnL() {
 		
 	}
 	
-	public void L() {
+	public void turnLI() {
 		
 	}
 	
-	public void LI() {
+	public void turnL2() {
 		
 	}
 	
-	public void L2() {
+	public void turnR() {
 		
 	}
 	
-	public void R() {
+	public void turnRI() {
 		
 	}
 	
-	public void RI() {
+	public void turnR2() {
 		
 	}
 	
-	public void R2() {
+	public void turnU() {
 		
 	}
 	
-	public void U() {
+	public void turnUI() {
 		
 	}
 	
-	public void UI() {
+	public void turnU2() {
 		
 	}
 	
-	public void U2() {
+	public void turnD() {
 		
 	}
 	
-	public void D() {
+	public void turnDI() {
 		
 	}
 	
-	public void DI() {
-		
-	}
-	
-	public void D2() {
+	public void turnD2() {
 		
 	}
 	

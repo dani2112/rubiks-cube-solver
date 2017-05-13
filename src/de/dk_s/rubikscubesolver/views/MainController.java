@@ -17,6 +17,7 @@ import org.opencv.videoio.VideoCapture;
 
 import de.dk_s.rubikscubesolver.domain.Cube;
 import de.dk_s.rubikscubesolver.recognition.CubeRecognizer;
+import de.dk_s.rubikscubesolver.solving.OldPochmannSolver;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,6 +53,15 @@ public class MainController {
 	private ChoiceBox<String> colorChoiceBox;
 	
 	private int selectedFaceId = 0;
+	
+	/* Solving */
+	@FXML
+	private Button showStepButton;
+	
+	private Button executeStepButton;
+	
+	private OldPochmannSolver solver;
+	
 	
 	/* Animation */
 	@FXML
@@ -109,6 +119,8 @@ public class MainController {
 			}
 			
 		});
+
+		this.solver = new OldPochmannSolver(cube);
 		
 		this.cubeRenderer = new CubeRenderer(subScene, cube);
 		
@@ -153,7 +165,19 @@ public class MainController {
 		}
 		isInputStarted = false;
 	}
+	
+	public void showNextStep() {
+		System.out.println("Show");
+		solver.getNextMove();
+	}
+	
+	@FXML
+	public void executeNextStep() {
+		System.out.println("Execute");
+		solver.executeNextMove();
+	}
 
+	@FXML
 	public void setClosed() {
 		// TODO Auto-generated method stub
 

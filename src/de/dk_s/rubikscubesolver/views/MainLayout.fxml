@@ -28,7 +28,16 @@
                   <Insets right="15.0" />
                </HBox.margin>
             </Button>
-            <ChoiceBox fx:id="colorChoiceBox" prefWidth="150.0" />
+            <ChoiceBox fx:id="colorChoiceBox" prefWidth="150.0">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin></ChoiceBox>
+            <Button fx:id="showStepButton" mnemonicParsing="false" onAction="#showNextStep" text="Show Next Step">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="executeStepButton" mnemonicParsing="false" onAction="#executeNextStep" text="Execute Next Step" />
          </children>
          <padding>
             <Insets left="15.0" right="15.0" />
