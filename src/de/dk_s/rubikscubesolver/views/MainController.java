@@ -75,6 +75,7 @@ public class MainController {
 			Mat frame = getNextFrame(videoCapture);
 			
 			try {
+				System.out.println("Frame");
 				cubeRecognizer.recognize(frame);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

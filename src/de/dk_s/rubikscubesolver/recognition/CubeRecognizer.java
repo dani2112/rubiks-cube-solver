@@ -22,7 +22,7 @@ public class CubeRecognizer extends Observable {
 	
 	int[] subCubeClasses = new int[9];
 	
-	double probabilityThreshold = 0.70;
+	double probabilityThreshold = 0.60;
 	
 	int[] probabilityOverThresholdCount = new int[9];
 	
@@ -69,6 +69,7 @@ public class CubeRecognizer extends Observable {
 				if(classificationResults[i] == null) {
 					continue;
 				}
+				System.out.println(classificationResults[i].probability);
 				if(classificationResults[i].probability > probabilityThreshold) {
 					if(subCubeClasses[i] == classificationResults[i].classLabel) {
 						probabilityOverThresholdCount[i]++;
