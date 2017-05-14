@@ -15,7 +15,7 @@ public class OldPochmannSolver {
 	}
 	
 	public void executeNextMove() {
-		
+		cube.turnFI();
 	}
 	
 }

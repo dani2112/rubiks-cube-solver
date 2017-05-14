@@ -1,5 +1,7 @@
 package de.dk_s.rubikscubesolver.domain;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Observable;
 
 public class Cube extends Observable {
@@ -27,16 +29,77 @@ public class Cube extends Observable {
 	}
 	
 	public void turnF() {
-		int[] redRow = cubeFaces[1].getCol(0);
-		cubeFaces[5].setRow(1, redRow);
+		int[] redCol = cubeFaces[1].getCol(0).clone();
+		reverseArray(redCol);
+		
+		int[] yellowRow = cubeFaces[5].getRow(0).clone();
+		
+		int[] orangeCol = cubeFaces[3].getCol(2).clone();
+		reverseArray(orangeCol);
+		
+		int[] whiteRow = cubeFaces[4].getRow(2).clone();
+		
+		cubeFaces[5].setRow(0, redCol);
+		cubeFaces[3].setCol(2, yellowRow);
+		cubeFaces[4].setRow(2, orangeCol);
+		cubeFaces[1].setCol(0, whiteRow);
+		
+		setChanged();
+		notifyObservers("facesUpdated");
 	}
 	
 	public void turnFI() {
+		int[] redCol = cubeFaces[1].getCol(0).clone();
 		
+		int[] yellowRow = cubeFaces[5].getRow(0).clone();
+		reverseArray(yellowRow);
+		
+		int[] orangeCol = cubeFaces[3].getCol(2).clone();
+		
+		int[] whiteRow = cubeFaces[4].getRow(2).clone();
+		reverseArray(whiteRow);
+		
+		cubeFaces[5].setRow(0, orangeCol);
+		cubeFaces[3].setCol(2, whiteRow);
+		cubeFaces[4].setRow(2, redCol);
+		cubeFaces[1].setCol(0, yellowRow);
+		
+		setChanged();
+		notifyObservers("facesUpdated");
 	}
 	
 	public void turnF2() {
+		int[] redCol = cubeFaces[1].getCol(0).clone();
+		reverseArray(redCol);
 		
+		int[] yellowRow = cubeFaces[5].getRow(0).clone();
+		
+		int[] orangeCol = cubeFaces[3].getCol(2).clone();
+		reverseArray(orangeCol);
+		
+		int[] whiteRow = cubeFaces[4].getRow(2).clone();
+		
+		cubeFaces[5].setRow(0, redCol);
+		cubeFaces[3].setCol(2, yellowRow);
+		cubeFaces[4].setRow(2, orangeCol);
+		cubeFaces[1].setCol(0, whiteRow);
+		
+		redCol = cubeFaces[1].getCol(0).clone();
+		reverseArray(redCol);
+		
+		yellowRow = cubeFaces[5].getRow(0).clone();
+		
+		orangeCol = cubeFaces[3].getCol(2).clone();
+		reverseArray(orangeCol);
+		
+		whiteRow = cubeFaces[4].getRow(2).clone();
+		
+		cubeFaces[5].setRow(0, redCol);
+		cubeFaces[3].setCol(2, yellowRow);
+		cubeFaces[4].setRow(2, orangeCol);
+		cubeFaces[1].setCol(0, whiteRow);
+		setChanged();
+		notifyObservers("facesUpdated");
 	}
 	
 	public void turnB() {
@@ -99,7 +162,14 @@ public class Cube extends Observable {
 		
 	}
 	
-	
+	private static void reverseArray(int[] data) {
+		for(int i = 0; i < data.length / 2; i++)
+		{
+		    int tmp = data[i];
+		    data[i] = data[data.length - i - 1];
+		    data[data.length - i - 1] = tmp;
+		}
+	}
 	
 	
 }
