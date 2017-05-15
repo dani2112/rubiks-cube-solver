@@ -86,7 +86,7 @@ public class Cube extends Observable {
 		notifyObservers("facesUpdated");
 	}
 	
-	public void flip90DegreesBackwards() {
+	public void flip90DegreesBackward() {
 		int frontFaceIndexTmp = frontFaceIndex;
 		int topFaceIndexTmp = topFaceIndex;
 		int backFaceIndexTmp = backFaceIndex;
@@ -152,150 +152,103 @@ public class Cube extends Observable {
 	
 
 	public void turnF() {
-		int[] redCol = cubeFaces[1].getCol(0).clone();
-		reverseArray(redCol);
+		int[] rightCol = getRightCubeFace().getCol(0).clone();
+		reverseArray(rightCol);
 
-		int[] yellowRow = cubeFaces[5].getRow(0).clone();
+		int[] bottomRow = getBottomCubeFace().getRow(0).clone();
 
-		int[] orangeCol = cubeFaces[3].getCol(2).clone();
-		reverseArray(orangeCol);
+		int[] leftCol = getLeftCubeFace().getCol(2).clone();
+		reverseArray(leftCol);
 
-		int[] whiteRow = cubeFaces[4].getRow(2).clone();
+		int[] topRow = getTopCubeFace().getRow(2).clone();
 
-		cubeFaces[5].setRow(0, redCol);
-		cubeFaces[3].setCol(2, yellowRow);
-		cubeFaces[4].setRow(2, orangeCol);
-		cubeFaces[1].setCol(0, whiteRow);
+		getBottomCubeFace().setRow(0, rightCol);
+		getLeftCubeFace().setCol(2, bottomRow);
+		getTopCubeFace().setRow(2, leftCol);
+		getRightCubeFace().setCol(0, topRow);
 
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnFI() {
-		int[] redCol = cubeFaces[1].getCol(0).clone();
+		
+		int[] rightCol = getRightCubeFace().getCol(0).clone();
 
-		int[] yellowRow = cubeFaces[5].getRow(0).clone();
-		reverseArray(yellowRow);
+		int[] bottomRow = getBottomCubeFace().getRow(0).clone();
+		reverseArray(bottomRow);
+		
+		int[] leftCol = getLeftCubeFace().getCol(2).clone();
 
-		int[] orangeCol = cubeFaces[3].getCol(2).clone();
+		int[] topRow = getTopCubeFace().getRow(2).clone();
+		reverseArray(topRow);
 
-		int[] whiteRow = cubeFaces[4].getRow(2).clone();
-		reverseArray(whiteRow);
-
-		cubeFaces[5].setRow(0, orangeCol);
-		cubeFaces[3].setCol(2, whiteRow);
-		cubeFaces[4].setRow(2, redCol);
-		cubeFaces[1].setCol(0, yellowRow);
+		getBottomCubeFace().setRow(0, leftCol);
+		getLeftCubeFace().setCol(2, topRow);
+		getTopCubeFace().setRow(2, rightCol);
+		getRightCubeFace().setCol(0, bottomRow);
 
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnF2() {
-		int[] redCol = cubeFaces[1].getCol(0).clone();
-		reverseArray(redCol);
+		int[] rightCol = getRightCubeFace().getCol(0).clone();
+		reverseArray(rightCol);
 
-		int[] yellowRow = cubeFaces[5].getRow(0).clone();
+		int[] bottomRow = getBottomCubeFace().getRow(0).clone();
 
-		int[] orangeCol = cubeFaces[3].getCol(2).clone();
-		reverseArray(orangeCol);
+		int[] leftCol = getLeftCubeFace().getCol(2).clone();
+		reverseArray(leftCol);
 
-		int[] whiteRow = cubeFaces[4].getRow(2).clone();
+		int[] topRow = getTopCubeFace().getRow(2).clone();
 
-		cubeFaces[5].setRow(0, redCol);
-		cubeFaces[3].setCol(2, yellowRow);
-		cubeFaces[4].setRow(2, orangeCol);
-		cubeFaces[1].setCol(0, whiteRow);
+		getBottomCubeFace().setRow(0, rightCol);
+		getLeftCubeFace().setCol(2, bottomRow);
+		getTopCubeFace().setRow(2, leftCol);
+		getRightCubeFace().setCol(0, topRow);
+		
+		rightCol = getRightCubeFace().getCol(0).clone();
+		reverseArray(rightCol);
 
-		redCol = cubeFaces[1].getCol(0).clone();
-		reverseArray(redCol);
+		bottomRow = getBottomCubeFace().getRow(0).clone();
 
-		yellowRow = cubeFaces[5].getRow(0).clone();
+		leftCol = getLeftCubeFace().getCol(2).clone();
+		reverseArray(leftCol);
 
-		orangeCol = cubeFaces[3].getCol(2).clone();
-		reverseArray(orangeCol);
+		topRow = getTopCubeFace().getRow(2).clone();
 
-		whiteRow = cubeFaces[4].getRow(2).clone();
-
-		cubeFaces[5].setRow(0, redCol);
-		cubeFaces[3].setCol(2, yellowRow);
-		cubeFaces[4].setRow(2, orangeCol);
-		cubeFaces[1].setCol(0, whiteRow);
+		getBottomCubeFace().setRow(0, rightCol);
+		getLeftCubeFace().setCol(2, bottomRow);
+		getTopCubeFace().setRow(2, leftCol);
+		getRightCubeFace().setCol(0, topRow);
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnB() {
-		int[] redCol = cubeFaces[1].getCol(2).clone();
-		reverseArray(redCol);
-
-		int[] yellowRow = cubeFaces[5].getRow(2).clone();
-
-		int[] orangeCol = cubeFaces[3].getCol(0).clone();
-		reverseArray(orangeCol);
-
-		int[] whiteRow = cubeFaces[4].getRow(0).clone();
-
-		cubeFaces[5].setRow(2, redCol);
-		cubeFaces[3].setCol(0, yellowRow);
-		cubeFaces[4].setRow(0, orangeCol);
-		cubeFaces[1].setCol(2, whiteRow);
+		flip90DegreesForward();
+		flip90DegreesForward();
+		
+		turnF();
+		
+		flip90DegreesBackward();
+		flip90DegreesBackward();
+		
 
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnBI() {
-		int[] redCol = cubeFaces[1].getCol(2).clone();
-
-		int[] yellowRow = cubeFaces[5].getRow(2).clone();
-		reverseArray(yellowRow);
-
-		int[] orangeCol = cubeFaces[3].getCol(0).clone();
-
-		int[] whiteRow = cubeFaces[4].getRow(0).clone();
-		reverseArray(whiteRow);
-
-		cubeFaces[5].setRow(2, orangeCol);
-		cubeFaces[3].setCol(0, whiteRow);
-		cubeFaces[4].setRow(0, redCol);
-		cubeFaces[1].setCol(2, yellowRow);
+		
 
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnB2() {
-		int[] redCol = cubeFaces[1].getCol(2).clone();
-		reverseArray(redCol);
-
-		int[] yellowRow = cubeFaces[5].getRow(2).clone();
-
-		int[] orangeCol = cubeFaces[3].getCol(0).clone();
-		reverseArray(orangeCol);
-
-		int[] whiteRow = cubeFaces[4].getRow(0).clone();
-
-		cubeFaces[5].setRow(2, redCol);
-		cubeFaces[3].setCol(0, yellowRow);
-		cubeFaces[4].setRow(0, orangeCol);
-		cubeFaces[1].setCol(2, whiteRow);
-
-		redCol = cubeFaces[1].getCol(2).clone();
-		reverseArray(redCol);
-
-		yellowRow = cubeFaces[5].getRow(2).clone();
-
-		orangeCol = cubeFaces[3].getCol(0).clone();
-		reverseArray(orangeCol);
-
-		whiteRow = cubeFaces[4].getRow(0).clone();
-
-		cubeFaces[5].setRow(2, redCol);
-		cubeFaces[3].setCol(0, yellowRow);
-		cubeFaces[4].setRow(0, orangeCol);
-		cubeFaces[1].setCol(2, whiteRow);
-
+		
 		setChanged();
 		notifyObservers("facesUpdated");
 	}

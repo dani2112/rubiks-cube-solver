@@ -17,6 +17,7 @@ public class CubeFace {
 				subCubes[i][j] = initColor;
 			}
 		}
+		subCubes[0][0] = 5;
 	}
 	
 	public void setCubeFaceId(int id) {

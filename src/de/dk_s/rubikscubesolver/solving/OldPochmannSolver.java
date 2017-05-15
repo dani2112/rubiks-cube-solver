@@ -18,7 +18,7 @@ public class OldPochmannSolver {
 	}
 	
 	public void executeNextMove() {
-		cube.flip90DegreesRight();
+		cube.turnFI();
 	}
 	
 }
