@@ -164,37 +164,37 @@ public class CubeRenderer {
 
 		float size = 10.0f;
 		/* Green */
-		frontFace = new CubeFaceGraphics(size, cube.getCubeFace(0));
+		frontFace = new CubeFaceGraphics(size, cube.getFrontCubeFace());
 		frontFace.setTranslateZ(-size*0.5);
 		
 		/* Red */
-		rightFace = new CubeFaceGraphics(size, cube.getCubeFace(1));
+		rightFace = new CubeFaceGraphics(size, cube.getRightCubeFace());
 		rightFace.setRotationAxis(Rotate.Y_AXIS);
 		rightFace.setRotate(-90.0f);
 		rightFace.setTranslateX(size * 0.5);
 		rightFace.setTranslateZ(0);
 		/* Blue */
-		backFace = new CubeFaceGraphics(size, cube.getCubeFace(2));
+		backFace = new CubeFaceGraphics(size, cube.getBackCubeFace());
 		backFace.setRotationAxis(Rotate.Y_AXIS);
 		backFace.setRotate(180.0);
 		backFace.setTranslateZ(size * 0.5);
 
 		/* Orange */
-		leftFace = new CubeFaceGraphics(size, cube.getCubeFace(3));
+		leftFace = new CubeFaceGraphics(size, cube.getLeftCubeFace());
 		leftFace.setRotationAxis(Rotate.Y_AXIS);
 		leftFace.setRotate(90.0f);
 		leftFace.setTranslateX(-size * 0.5);
 		leftFace.setTranslateZ(0);
 
 		/* White */
-		topFace = new CubeFaceGraphics(size, cube.getCubeFace(4));
+		topFace = new CubeFaceGraphics(size, cube.getTopCubeFace());
 		topFace.setRotationAxis(Rotate.X_AXIS);
 		topFace.setRotate(-90.0);
 		topFace.setTranslateY(size * -0.5);
 		topFace.setTranslateZ(0);
 
 		/* Yellow */
-		bottomFace = new CubeFaceGraphics(size, cube.getCubeFace(5));
+		bottomFace = new CubeFaceGraphics(size, cube.getBottomCubeFace());
 		bottomFace.setRotationAxis(Rotate.X_AXIS);
 		bottomFace.setRotate(90.0);
 		bottomFace.setTranslateY(size * 0.5);

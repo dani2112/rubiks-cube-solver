@@ -4,10 +4,19 @@ public class CubeFace {
 
 	private int cubeFaceId = -1;
 	
-	private int[][] subCubes = new int[3][3];
+	private int[][] subCubes;
 	
 	public CubeFace() {
+		subCubes = new int[3][3];
+	}
 	
+	public CubeFace(int initColor) {
+		subCubes = new int[3][3];
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; j < 3; j++) {
+				subCubes[i][j] = initColor;
+			}
+		}
 	}
 	
 	public void setCubeFaceId(int id) {
@@ -49,6 +58,28 @@ public class CubeFace {
 		for(int i = 0; i < 3; i++) {
 			subCubes[i][y] = row[i];
 		}
+	}
+	
+	public void rotateClockWise() {
+		subCubes = rotateClockwise(subCubes);
+	}
+	
+	public void rotateCounterClockWise() {
+		subCubes = rotateClockwise(subCubes);
+		subCubes = rotateClockwise(subCubes);
+		subCubes = rotateClockwise(subCubes);
+	}
+	
+	static int[][] rotateClockwise(int[][] mat) {
+	    final int m = mat.length;
+	    final int n = mat[0].length;
+	    int[][] ret = new int[n][m];
+	    for (int r = 0; r < m; r++) {
+	        for (int c = 0; c < n; c++) {
+	            ret[c][m-1-r] = mat[r][c];
+	        }
+	    }
+	    return ret;
 	}
 	
 }

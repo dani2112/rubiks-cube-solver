@@ -94,7 +94,26 @@ public class CubeRecognizer extends Observable {
 				for(int i = 0; i < subCubeClasses.length; i++) {
 					cubeFaceNew.setSubCubeColor(i % 3, i / 3, subCubeClasses[i]);
 				}
-				cube.setCubeFace(currentCubeFaceIndex, cubeFaceNew);
+				switch(currentCubeFaceIndex) {
+				case 0:
+					cube.setFrontCubeFace(cubeFaceNew);
+					break;
+				case 1:
+					cube.setRightCubeFace(cubeFaceNew);
+					break;
+				case 2:
+					cube.setBackCubeFace(cubeFaceNew);
+					break;
+				case 3:
+					cube.setLeftCubeFace(cubeFaceNew);
+					break;
+				case 4:
+					cube.setTopCubeFace(cubeFaceNew);
+					break;
+				case 5:
+					cube.setBottomCubeFace(cubeFaceNew);
+					break;
+				}
 			}
 			setChanged();
 			notifyObservers("faceComplete");
