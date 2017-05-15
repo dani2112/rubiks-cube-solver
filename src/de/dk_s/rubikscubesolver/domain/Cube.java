@@ -166,6 +166,8 @@ public class Cube extends Observable {
 		getLeftCubeFace().setCol(2, bottomRow);
 		getTopCubeFace().setRow(2, leftCol);
 		getRightCubeFace().setCol(0, topRow);
+		
+		getFrontCubeFace().rotateClockWise();
 
 		setChanged();
 		notifyObservers("facesUpdated");
@@ -187,6 +189,8 @@ public class Cube extends Observable {
 		getLeftCubeFace().setCol(2, topRow);
 		getTopCubeFace().setRow(2, rightCol);
 		getRightCubeFace().setCol(0, bottomRow);
+		
+		getFrontCubeFace().rotateCounterClockWise();
 
 		setChanged();
 		notifyObservers("facesUpdated");
@@ -222,6 +226,10 @@ public class Cube extends Observable {
 		getLeftCubeFace().setCol(2, bottomRow);
 		getTopCubeFace().setRow(2, leftCol);
 		getRightCubeFace().setCol(0, topRow);
+		
+		getFrontCubeFace().rotateClockWise();
+		getFrontCubeFace().rotateClockWise();
+		
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
