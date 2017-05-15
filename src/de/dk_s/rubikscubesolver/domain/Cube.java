@@ -150,6 +150,42 @@ public class Cube extends Observable {
 		notifyObservers("facesUpdated");
 	}
 	
+	public void rotateYAxis90Clockwise() {
+		int frontFaceIndexTmp = frontFaceIndex;
+		int leftFaceIndexTmp = leftFaceIndex;
+		int backFaceIndexTmp = backFaceIndex;
+		int rightFaceIndexTmp = rightFaceIndex;
+		
+		frontFaceIndex = rightFaceIndexTmp;
+		leftFaceIndex= frontFaceIndexTmp;
+		backFaceIndex = leftFaceIndexTmp;
+		rightFaceIndex = backFaceIndexTmp;
+		
+		getTopCubeFace().rotateClockWise();
+		getBottomCubeFace().rotateCounterClockWise();
+		
+		setChanged();
+		notifyObservers("facesUpdated");
+	}
+	
+	public void rotateYAxis90CounterClockwise() {
+		int frontFaceIndexTmp = frontFaceIndex;
+		int leftFaceIndexTmp = leftFaceIndex;
+		int backFaceIndexTmp = backFaceIndex;
+		int rightFaceIndexTmp = rightFaceIndex;
+		
+		frontFaceIndex = leftFaceIndexTmp;
+		leftFaceIndex= backFaceIndexTmp;
+		backFaceIndex = rightFaceIndexTmp;
+		rightFaceIndex = frontFaceIndexTmp;
+		
+		getTopCubeFace().rotateCounterClockWise();
+		getBottomCubeFace().rotateClockWise();
+		
+		setChanged();
+		notifyObservers("facesUpdated");
+	}
+	
 
 	public void turnF() {
 		int[] rightCol = getRightCubeFace().getCol(0).clone();
@@ -249,7 +285,13 @@ public class Cube extends Observable {
 	}
 
 	public void turnBI() {
+		flip90DegreesForward();
+		flip90DegreesForward();
 		
+		turnFI();
+		
+		flip90DegreesBackward();
+		flip90DegreesBackward();
 
 		setChanged();
 		notifyObservers("facesUpdated");
@@ -257,70 +299,120 @@ public class Cube extends Observable {
 
 	public void turnB2() {
 		
+		flip90DegreesForward();
+		flip90DegreesForward();
+		
+		turnF2();
+		
+		flip90DegreesBackward();
+		flip90DegreesBackward();
+		
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnL() {
-		int[] greenCol = cubeFaces[0].getCol(0).clone();
-
-		int[] yellowCol = cubeFaces[5].getCol(0).clone();
+		rotateYAxis90CounterClockwise();
 		
-		int[] blueCol = cubeFaces[2].getCol(2).clone();
-
-		int[] whiteCol = cubeFaces[4].getCol(0).clone();
+		turnF();
 		
-		cubeFaces[5].setCol(0, greenCol);
-		cubeFaces[2].setCol(2, yellowCol);
-		cubeFaces[4].setCol(0, blueCol);
-		cubeFaces[0].setCol(0, whiteCol);
+		rotateYAxis90Clockwise();
+		
 
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
 
 	public void turnLI() {
-
+		rotateYAxis90CounterClockwise();
+		
+		turnFI();
+		
+		rotateYAxis90Clockwise();
+		
+		
 	}
 
 	public void turnL2() {
-
+		rotateYAxis90CounterClockwise();
+		
+		turnF2();
+		
+		rotateYAxis90Clockwise();
 	}
 
 	public void turnR() {
-
+		rotateYAxis90Clockwise();
+		
+		turnF();
+		
+		rotateYAxis90CounterClockwise();
+		
+		
 	}
 
 	public void turnRI() {
-
+		rotateYAxis90Clockwise();
+		
+		turnFI();
+		
+		rotateYAxis90CounterClockwise();
 	}
 
 	public void turnR2() {
-
+		rotateYAxis90Clockwise();
+		
+		turnF2();
+		
+		rotateYAxis90CounterClockwise();
 	}
 
 	public void turnU() {
-
+		flip90DegreesForward();
+		
+		turnF();
+		
+		flip90DegreesBackward();
 	}
 
 	public void turnUI() {
-
+		flip90DegreesForward();
+		
+		turnFI();
+		
+		flip90DegreesBackward();
 	}
 
 	public void turnU2() {
-
+		flip90DegreesForward();
+		
+		turnF2();
+		
+		flip90DegreesBackward();
 	}
 
 	public void turnD() {
-
+		flip90DegreesBackward();
+		
+		turnF();
+		
+		flip90DegreesForward();
 	}
 
 	public void turnDI() {
-
+		flip90DegreesBackward();
+		
+		turnFI();
+		
+		flip90DegreesForward();
 	}
 
 	public void turnD2() {
-
+		flip90DegreesBackward();
+		
+		turnF2();
+		
+		flip90DegreesForward();
 	}
 
 	private static void reverseArray(int[] data) {

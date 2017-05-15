@@ -18,6 +18,7 @@ public class CubeFace {
 			}
 		}
 		subCubes[0][0] = 5;
+		subCubes[2][2] = 3;
 	}
 	
 	public void setCubeFaceId(int id) {
@@ -61,17 +62,17 @@ public class CubeFace {
 		}
 	}
 	
-	public void rotateClockWise() {
-		subCubes = rotateClockwise(subCubes);
-	}
-	
 	public void rotateCounterClockWise() {
-		subCubes = rotateClockwise(subCubes);
-		subCubes = rotateClockwise(subCubes);
-		subCubes = rotateClockwise(subCubes);
+		subCubes = rotateCounterClockwise(subCubes);
 	}
 	
-	static int[][] rotateClockwise(int[][] mat) {
+	public void rotateClockWise() {
+		subCubes = rotateCounterClockwise(subCubes);
+		subCubes = rotateCounterClockwise(subCubes);
+		subCubes = rotateCounterClockwise(subCubes);
+	}
+	
+	static int[][] rotateCounterClockwise(int[][] mat) {
 	    final int m = mat.length;
 	    final int n = mat[0].length;
 	    int[][] ret = new int[n][m];
