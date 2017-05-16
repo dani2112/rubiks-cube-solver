@@ -6,6 +6,8 @@ public class CubeFace {
 	
 	private int[][] subCubes;
 	
+	private int currentRotation = 0;
+	
 	public CubeFace() {
 		subCubes = new int[3][3];
 	}
@@ -17,8 +19,6 @@ public class CubeFace {
 				subCubes[i][j] = initColor;
 			}
 		}
-		subCubes[0][0] = 5;
-		subCubes[2][2] = 3;
 	}
 	
 	public void setCubeFaceId(int id) {
@@ -62,14 +62,25 @@ public class CubeFace {
 		}
 	}
 	
+	public int getCurrentRotation() {
+		return currentRotation;
+	}
+	
 	public void rotateCounterClockWise() {
 		subCubes = rotateCounterClockwise(subCubes);
+		if(--currentRotation <= -4) {
+			currentRotation = 0;
+		}
 	}
 	
 	public void rotateClockWise() {
 		subCubes = rotateCounterClockwise(subCubes);
 		subCubes = rotateCounterClockwise(subCubes);
 		subCubes = rotateCounterClockwise(subCubes);
+		
+		if(++currentRotation >= 4) {
+			currentRotation = 0;
+		}
 	}
 	
 	static int[][] rotateCounterClockwise(int[][] mat) {

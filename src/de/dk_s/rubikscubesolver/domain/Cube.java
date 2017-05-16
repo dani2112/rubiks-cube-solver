@@ -1,6 +1,7 @@
 package de.dk_s.rubikscubesolver.domain;
 
 import java.util.Observable;
+import java.util.Scanner;
 
 public class Cube extends Observable {
 
@@ -86,6 +87,72 @@ public class Cube extends Observable {
 		notifyObservers("facesUpdated");
 	}
 	
+	public void executeSequence(String sequence) {
+		Scanner sc = new Scanner(sequence);
+		while(sc.hasNext()) {
+			String currentToken = sc.next();
+			switch(currentToken) {
+			case "F":
+				turnF();
+				break;
+			case "F'":
+				turnFI();
+				break;
+			case "F2":
+				turnF2();
+				break;
+			case "B":
+				turnB();
+				break;
+			case "B'":
+				turnBI();
+				break;
+			case "B2":
+				turnB2();
+				break;
+			case "R":
+				turnR();
+				break;
+			case "R'":
+				turnRI();
+				break;
+			case "R2":
+				turnR2();
+				break;
+			case "L":
+				turnL();
+				break;
+			case "L'":
+				turnLI();
+				break;
+			case "L2":
+				turnL2();
+				break;
+			case "U":
+				turnU();
+				break;
+			case "U'":
+				turnUI();
+				break;
+			case "U2":
+				turnU2();
+				break;
+			case "D":
+				turnD();
+				break;
+			case "D'":
+				turnDI();
+				break;
+			case "D2":
+				turnD2();
+				break;
+			}
+		}
+		
+		sc.close();
+	};
+	
+	
 	public void flip90DegreesBackward() {
 		int frontFaceIndexTmp = frontFaceIndex;
 		int topFaceIndexTmp = topFaceIndex;
@@ -98,6 +165,13 @@ public class Cube extends Observable {
 		bottomFaceIndex = backFaceIndexTmp;
 		getRightCubeFace().rotateClockWise();
 		getLeftCubeFace().rotateCounterClockWise();
+		
+		getBackCubeFace().rotateClockWise();
+		getBackCubeFace().rotateClockWise();
+		
+		getBottomCubeFace().rotateClockWise();
+		getBottomCubeFace().rotateClockWise();
+		
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
@@ -114,6 +188,14 @@ public class Cube extends Observable {
 		bottomFaceIndex = frontFaceIndexTmp;
 		getRightCubeFace().rotateCounterClockWise();
 		getLeftCubeFace().rotateClockWise();
+	
+		getBackCubeFace().rotateClockWise();
+		getBackCubeFace().rotateClockWise();
+		
+		getTopCubeFace().rotateClockWise();
+		getTopCubeFace().rotateClockWise();
+		
+		
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
@@ -130,6 +212,12 @@ public class Cube extends Observable {
 		topFaceIndex = rightFaceIndexTmp;
 		getFrontCubeFace().rotateCounterClockWise();
 		getBackCubeFace().rotateClockWise();
+		
+		getTopCubeFace().rotateCounterClockWise();
+		getRightCubeFace().rotateCounterClockWise();
+		getBottomCubeFace().rotateCounterClockWise();
+		getLeftCubeFace().rotateCounterClockWise();
+		
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
@@ -146,6 +234,11 @@ public class Cube extends Observable {
 		topFaceIndex = leftFaceIndexTmp;
 		getFrontCubeFace().rotateClockWise();
 		getBackCubeFace().rotateCounterClockWise();
+		
+		getTopCubeFace().rotateClockWise();
+		getRightCubeFace().rotateClockWise();
+		getBottomCubeFace().rotateClockWise();
+		getLeftCubeFace().rotateClockWise();
 		setChanged();
 		notifyObservers("facesUpdated");
 	}
