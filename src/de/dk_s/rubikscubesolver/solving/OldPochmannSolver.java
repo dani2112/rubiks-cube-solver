@@ -16,7 +16,7 @@ public class OldPochmannSolver {
 
 	private boolean isInitialized = false;
 
-	private int currentStep = 0;
+	private boolean edgesSolved = false;
 
 	/* Algorithms */
 	private String tPerm = "R U R' U' R' F R2 U' R' U' R U R' F'";
@@ -31,7 +31,7 @@ public class OldPochmannSolver {
 
 	/* Data structures for holding pieces */
 	private List<EdgePiece> edgePieces = new ArrayList<>();
-	
+
 	private List<CornerPiece> cornerPieces = new ArrayList<>();
 
 	private static class EdgePiece {
@@ -50,7 +50,7 @@ public class OldPochmannSolver {
 		public boolean isSolved = false;
 
 	}
-	
+
 	private static class CornerPiece {
 		public String name = "";
 
@@ -124,10 +124,9 @@ public class OldPochmannSolver {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
-	
+
 	private int getFaceColorFromNotationString(String face) {
 		int color = 0;
 		switch (face) {
@@ -167,14 +166,59 @@ public class OldPochmannSolver {
 
 	public void executeNextMove() {
 		if (!isInitialized) {
-			setupCubeOrientation();
+			//setupCubeOrientation();
 
 			/* Only for testing! Remove scramble after full test */
-			cube.executeSequence("R L U2 D2 L2 B2 R' B2 U2 F2 L2 B D' B' D' L' U' L2 B' D2 R");
-
+			cube.executeSequence("D2 R2 B2 L' R2 B2 R2 D' R2 F U B R2 D' B L' F' U2 F2 U' D2 R D' B U2");
 			initializeSolver();
 			isInitialized = true;
+			return;
 		}
+
+		if (!edgesSolved) {
+			EdgePiece edgePiece = getBufferEdgePiece();
+			cube.executeSequence(edgePiece.setupMove);
+			executePermutation(edgePiece.perm);
+			cube.executeSequence(edgePiece.undoSetupMove);
+		}
+
+	}
+
+	private void executePermutation(String perm) {
+		perm = perm.toLowerCase();
+		switch (perm) {
+		case "t-perm":
+			cube.executeSequence(tPerm);
+			break;
+		case "j-perm":
+			cube.executeSequence(jPerm);
+			break;
+		case "l-perm":
+			cube.executeSequence(lPerm);
+			break;
+		case "y-perm":
+			cube.executeSequence(yPerm);
+			break;
+		case "r-perm":
+			cube.executeSequence(rPerm);
+			break;
+		default:
+			System.out.println("Permutation unknown!");
+		}
+	}
+
+	private EdgePiece getBufferEdgePiece() {
+		int bufferColor1 = cube.getTopCubeFace().getSubCubeColor(2, 1);
+		int bufferColor2 = cube.getRightCubeFace().getSubCubeColor(1, 0);
+		EdgePiece edgePiece = null;
+		for (EdgePiece piece : edgePieces) {
+			if (piece.color1 == bufferColor1 && piece.color2 == bufferColor2
+					|| piece.color1 == bufferColor2 && piece.color2 == bufferColor1) {
+				edgePiece = piece;
+				break;
+			}
+		}
+		return edgePiece;
 	}
 
 }

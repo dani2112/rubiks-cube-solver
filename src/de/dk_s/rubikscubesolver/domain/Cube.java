@@ -101,6 +101,9 @@ public class Cube extends Observable {
 			case "F2":
 				turnF2();
 				break;
+			case "Fw":
+				turnFw();
+				break;
 			case "B":
 				turnB();
 				break;
@@ -109,6 +112,9 @@ public class Cube extends Observable {
 				break;
 			case "B2":
 				turnB2();
+				break;
+			case "Bw":
+				turnBw();
 				break;
 			case "R":
 				turnR();
@@ -119,6 +125,9 @@ public class Cube extends Observable {
 			case "R2":
 				turnR2();
 				break;
+			case "Rw":
+				turnRw();
+				break;
 			case "L":
 				turnL();
 				break;
@@ -127,6 +136,9 @@ public class Cube extends Observable {
 				break;
 			case "L2":
 				turnL2();
+				break;
+			case "Lw":
+				turnLw();
 				break;
 			case "U":
 				turnU();
@@ -137,6 +149,9 @@ public class Cube extends Observable {
 			case "U2":
 				turnU2();
 				break;
+			case "Uw":
+				turnUw();
+				break;
 			case "D":
 				turnD();
 				break;
@@ -145,6 +160,9 @@ public class Cube extends Observable {
 				break;
 			case "D2":
 				turnD2();
+				break;
+			case "Dw":
+				turnDw();
 				break;
 			}
 		}
