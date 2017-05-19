@@ -2,7 +2,7 @@ package de.dk_s.rubikscubesolver.domain;
 
 public class CubeFace {
 
-	private int cubeFaceId = -1;
+	private int color = -1;
 	
 	private int[][] subCubes;
 	
@@ -21,8 +21,8 @@ public class CubeFace {
 		}
 	}
 	
-	public void setCubeFaceId(int id) {
-		this.cubeFaceId = id;
+	public int getCubeFaceColor() {
+		return subCubes[1][1];
 	}
 	
 	public int getSubCubeColor(int x, int y) {

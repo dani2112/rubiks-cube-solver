@@ -90,7 +90,6 @@ public class CubeRecognizer extends Observable {
 			if(isCurrentCubeFaceComplete == true) {
 				this.isCurrentCubeFaceComplete = true;
 				CubeFace cubeFaceNew = new CubeFace();
-				cubeFaceNew.setCubeFaceId(currentCubeFaceIndex);
 				for(int i = 0; i < subCubeClasses.length; i++) {
 					cubeFaceNew.setSubCubeColor(i % 3, i / 3, subCubeClasses[i]);
 				}

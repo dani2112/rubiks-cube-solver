@@ -1,0 +1,22 @@
+UF;none;J-perm;none
+UL;none;T-perm;none
+UB;none;L-perm;none
+FU;Lw';L-perm;Lw
+FR;Dw2 L;T-perm;L' Dw2
+FD;Lw';J-perm;Lw
+FL;L';T-perm;L
+LU;L' Dw L';T-perm;L Dw' L
+LF;Dw' L;T-perm;L' Dw
+LD;D Lw';J-perm;Lw D'
+LB;Dw L';T-perm;L Dw'
+BU;Lw;J-perm;Lw'
+BL;L;T-perm;L'
+BD;Lw;L-perm;Lw'
+BR;Dw2 L';T-perm;L Dw2
+RB;Dw L;T-perm;L' Dw'
+RD;D' Lw';J-perm;Lw D
+RF;Dw' L';T-perm;L Dw
+DF;D' L2;T-perm;L2 D 
+DL;L2;T-perm;L2
+DB;D L2;T-perm;L2 D'
+DR;D2 L2;T-perm;L2 D2
