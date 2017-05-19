@@ -23,7 +23,7 @@ public class OldPochmannSolver {
 
 	private String jPerm = "R U2 R' U' R U2 L' U R' U' L";
 
-	private String lPerm = "R' U2 R U R' U2' L U' R U L'";
+	private String lPerm = "R' U2 R U R' U2 L U' R U L'";
 
 	private String yPerm = "R U' R' U' R U R' F' R U R' U' R' F R";
 
@@ -171,25 +171,38 @@ public class OldPochmannSolver {
 
 			/* Only for testing! Remove scramble after full test */
 			cube.executeSequence("R L U2 D2 L2 B2 R' B2 U2 F2 L2 B D' B' D' L' U' L2 B' D2 R");
+
 			initializeSolver();
 			isInitialized = true;
 			return;
 		}
 
+		/* Solve edges */
 		if (!edgesSolved) {
 			EdgePiece edgePiece = getBufferEdgePiece();
-			if(edgePiece == null) {
-				for(EdgePiece e : edgePieces) {
-					if(!e.isSolved) {
+			if (edgePiece == null) {
+				for (EdgePiece e : edgePieces) {
+					if (!e.isSolved) {
 						edgePiece = e;
 					}
 				}
+				if (edgePiece == null) {
+					edgesSolved = true;
+					return;
+				}
 			}
-			System.out.println(edgePiece.name);
 			cube.executeSequence(edgePiece.setupMove);
 			executePermutation(edgePiece.perm);
 			cube.executeSequence(edgePiece.undoSetupMove);
 			edgePiece.isSolved = true;
+
+			/* Check if edge solving is done */
+
+		}
+
+		/* Flip edges */
+		if (edgesSolved) {
+
 		}
 
 	}
@@ -222,8 +235,7 @@ public class OldPochmannSolver {
 		int bufferColor2 = cube.getRightCubeFace().getSubCubeColor(1, 0);
 		EdgePiece edgePiece = null;
 		for (EdgePiece piece : edgePieces) {
-			if (piece.color1 == bufferColor1 && piece.color2 == bufferColor2
-					|| piece.color1 == bufferColor2 && piece.color2 == bufferColor1) {
+			if (piece.color1 == bufferColor1 && piece.color2 == bufferColor2) {
 				edgePiece = piece;
 				break;
 			}

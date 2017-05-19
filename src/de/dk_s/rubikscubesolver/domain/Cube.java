@@ -201,7 +201,7 @@ public class Cube extends Observable {
 				turnDw2();
 				break;
 			default:
-				System.out.println("Unknown cube rotation!");
+				System.out.println("Unknown cube rotation: " + currentToken);
 			}
 		}
 		
