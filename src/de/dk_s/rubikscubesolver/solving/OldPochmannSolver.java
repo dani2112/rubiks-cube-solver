@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import de.dk_s.rubikscubesolver.domain.Cube;
+import de.dk_s.rubikscubesolver.domain.CubeFace;
 
 /* Solves a cube according to this tutorial https://www.youtube.com/watch?v=idRv29MhQ74&t=1034s
  * Algorithms provided in the description*/
@@ -37,6 +38,10 @@ public class OldPochmannSolver {
 	private static class EdgePiece {
 
 		public String name = "";
+		
+		public int xIndex = 0;
+		
+		public int yIndex = 0;
 
 		public int color1 = 0;
 		public int color2 = 0;
@@ -94,6 +99,8 @@ public class OldPochmannSolver {
 				edgePiece.setupMove = lineSplit[1].equals("none") ? "" : lineSplit[1];
 				edgePiece.perm = lineSplit[2].equals("none") ? "" : lineSplit[2];
 				edgePiece.undoSetupMove = lineSplit[3].equals("none") ? "" : lineSplit[3];
+				edgePiece.xIndex = Integer.parseInt(lineSplit[4]);
+				edgePiece.yIndex = Integer.parseInt(lineSplit[5]);
 				edgePiece.color1 = getFaceColorFromNotationString(edgePiece.name.substring(0, 1));
 				edgePiece.color2 = getFaceColorFromNotationString(edgePiece.name.substring(1, 2));
 				edgePieces.add(edgePiece);
@@ -127,6 +134,8 @@ public class OldPochmannSolver {
 
 	}
 
+	
+	
 	private int getFaceColorFromNotationString(String face) {
 		int color = 0;
 		switch (face) {
@@ -153,6 +162,34 @@ public class OldPochmannSolver {
 			color = 0;
 		}
 		return color;
+	}
+	
+	private CubeFace getFaceFromNotationString(String face) {
+		CubeFace cubeFace = null;
+		switch (face) {
+		case "U":
+			cubeFace = cube.getTopCubeFace();
+			break;
+		case "F":
+			cubeFace = cube.getFrontCubeFace();
+			break;
+		case "L":
+			cubeFace = cube.getLeftCubeFace();
+			break;
+		case "B":
+			cubeFace = cube.getBackCubeFace();
+			break;
+		case "R":
+			cubeFace = cube.getRightCubeFace();
+			break;
+		case "D":
+			cubeFace = cube.getBottomCubeFace();
+			break;
+		default:
+			System.out.println("Error while getting cubeface");
+			cubeFace = null;
+		}
+		return cubeFace;
 	}
 
 	private void solveEdges() {
@@ -196,8 +233,24 @@ public class OldPochmannSolver {
 			cube.executeSequence(edgePiece.undoSetupMove);
 			edgePiece.isSolved = true;
 
+			
 			/* Check if edge solving is done */
-
+			edgesSolved = true;
+			for(EdgePiece piece : edgePieces) {
+				String reverseName = new StringBuilder(piece.name).reverse().toString();
+				EdgePiece matchingPiece = null;
+				for(EdgePiece mPiece : edgePieces) {
+					if(reverseName.equals(mPiece.name)) {
+						matchingPiece = mPiece;
+					};
+				}
+				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
+				int currentColor2 = getFaceFromNotationString(matchingPiece.name.substring(0, 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
+				if(!(currentColor1 == piece.color1 && currentColor2 == piece.color2 || currentColor1 == piece.color2 && currentColor2 == piece.color1)) {
+					edgesSolved = false;
+				}
+			}
+			System.out.println(edgesSolved);
 		}
 
 		/* Flip edges */

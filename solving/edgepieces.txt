@@ -1,22 +1,22 @@
-UF;none;J-perm;none
-UL;none;T-perm;none
-UB;none;L-perm;none
-FU;Lw';L-perm;Lw
-FR;Dw2 L;T-perm;L' Dw2
-FD;Lw';J-perm;Lw
-FL;L';T-perm;L
-LU;L' Dw L';T-perm;L Dw' L
-LF;Dw' L;T-perm;L' Dw
-LD;D Lw';J-perm;Lw D'
-LB;Dw L';T-perm;L Dw'
-BU;Lw;J-perm;Lw'
-BL;L;T-perm;L'
-BD;Lw;L-perm;Lw'
-BR;Dw2 L';T-perm;L Dw2
-RB;Dw L;T-perm;L' Dw'
-RD;D' Lw';J-perm;Lw D
-RF;Dw' L';T-perm;L Dw
-DF;D' L2;T-perm;L2 D 
-DL;L2;T-perm;L2
-DB;D L2;T-perm;L2 D'
-DR;D2 L2;T-perm;L2 D2
+UF;none;J-perm;none;1;2
+UL;none;T-perm;none;0;1
+UB;none;L-perm;none;1;0
+FU;Lw';L-perm;Lw;1;0
+FR;Dw2 L;T-perm;L' Dw2;2;1
+FD;Lw';J-perm;Lw;1;2
+FL;L';T-perm;L;0;1
+LU;L' Dw L';T-perm;L Dw' L;1;0
+LF;Dw' L;T-perm;L' Dw;2;1
+LD;D Lw';J-perm;Lw D';1;2
+LB;Dw L';T-perm;L Dw';0;1
+BU;Lw;J-perm;Lw';0;1
+BL;L;T-perm;L';2;1
+BD;Lw;L-perm;Lw';1;2
+BR;Dw2 L';T-perm;L Dw2;0;1
+RB;Dw L;T-perm;L' Dw';2;1
+RD;D' Lw';J-perm;Lw D;1;2
+RF;Dw' L';T-perm;L Dw;0;1
+DF;D' L2;T-perm;L2 D;1;0
+DL;L2;T-perm;L2;0;1
+DB;D L2;T-perm;L2 D';1;2
+DR;D2 L2;T-perm;L2 D2;2;1
