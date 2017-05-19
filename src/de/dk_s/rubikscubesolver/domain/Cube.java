@@ -104,6 +104,12 @@ public class Cube extends Observable {
 			case "Fw":
 				turnFw();
 				break;
+			case "Fw'":
+				turnFwI();
+				break;
+			case "Fw2":
+				turnFw2();
+				break;
 			case "B":
 				turnB();
 				break;
@@ -115,6 +121,12 @@ public class Cube extends Observable {
 				break;
 			case "Bw":
 				turnBw();
+				break;
+			case "Bw'":
+				turnBwI();
+				break;
+			case "Bw2":
+				turnBw2();
 				break;
 			case "R":
 				turnR();
@@ -128,6 +140,12 @@ public class Cube extends Observable {
 			case "Rw":
 				turnRw();
 				break;
+			case "Rw'":
+				turnRwI();
+				break;
+			case "Rw2":
+				turnRw2();
+				break;
 			case "L":
 				turnL();
 				break;
@@ -139,6 +157,12 @@ public class Cube extends Observable {
 				break;
 			case "Lw":
 				turnLw();
+				break;
+			case "Lw'":
+				turnLwI();
+				break;
+			case "Lw2":
+				turnLw2();
 				break;
 			case "U":
 				turnU();
@@ -152,6 +176,12 @@ public class Cube extends Observable {
 			case "Uw":
 				turnUw();
 				break;
+			case "Uw'":
+				turnUwI();
+				break;
+			case "Uw2":
+				turnUw2();
+				break;
 			case "D":
 				turnD();
 				break;
@@ -164,6 +194,14 @@ public class Cube extends Observable {
 			case "Dw":
 				turnDw();
 				break;
+			case "Dw'":
+				turnDwI();
+				break;
+			case "Dw2":
+				turnDw2();
+				break;
+			default:
+				System.out.println("Unknown cube rotation!");
 			}
 		}
 		
@@ -385,6 +423,16 @@ public class Cube extends Observable {
 		turnB();
 		this.flip90DegreesRight();
 	}
+	
+	public void turnFwI() {
+		turnBI();
+		this.flip90DegreesLeft();
+	}
+	
+	public void turnFw2() {
+		turnFw();
+		turnFw();
+	}
 
 	public void turnB() {
 		flip90DegreesForward();
@@ -431,6 +479,16 @@ public class Cube extends Observable {
 		turnF();
 		flip90DegreesLeft();
 	}
+	
+	public void turnBwI() {
+		turnFI();
+		flip90DegreesRight();
+	}
+	
+	public void turnBw2() {
+		turnBw();
+		turnBw();
+	}
 
 	public void turnL() {
 		rotateYAxis90CounterClockwise();
@@ -466,6 +524,16 @@ public class Cube extends Observable {
 		turnR();
 		flip90DegreesForward();
 	}
+	
+	public void turnLwI() {
+		turnRI();
+		flip90DegreesBackward();
+	}
+	
+	public void turnLw2() {
+		turnLw();
+		turnLw();
+	}
 
 	public void turnR() {
 		rotateYAxis90Clockwise();
@@ -498,6 +566,16 @@ public class Cube extends Observable {
 		flip90DegreesBackward();
 	}
 	
+	public void turnRwI() {
+		turnLI();
+		flip90DegreesForward();
+	}
+	
+	public void turnRw2() {
+		turnRw();
+		turnRw();
+	}
+	
 	public void turnU() {
 		flip90DegreesForward();
 		
@@ -524,9 +602,19 @@ public class Cube extends Observable {
 	
 	public void turnUw() {
 		turnD();
-		this.rotateYAxis90Clockwise();
+		rotateYAxis90Clockwise();
 	}
 
+	public void turnUwI() {
+		turnDI();
+		rotateYAxis90CounterClockwise();
+	}
+	
+	public void turnUw2() {
+		turnUw();
+		turnUw();
+	}
+	
 	public void turnD() {
 		flip90DegreesBackward();
 		
@@ -554,6 +642,16 @@ public class Cube extends Observable {
 	public void turnDw() {
 		turnU();
 		rotateYAxis90CounterClockwise();
+	}
+	
+	public void turnDw2() {
+		turnDw();
+		turnDw();
+	}
+	
+	public void turnDwI() {
+		turnUI();
+		rotateYAxis90Clockwise();
 	}
 
 	private static void reverseArray(int[] data) {

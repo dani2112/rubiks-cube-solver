@@ -166,10 +166,11 @@ public class OldPochmannSolver {
 
 	public void executeNextMove() {
 		if (!isInitialized) {
-			//setupCubeOrientation();
+			System.out.println("Initialize");
+			setupCubeOrientation();
 
 			/* Only for testing! Remove scramble after full test */
-			cube.executeSequence("D2 R2 B2 L' R2 B2 R2 D' R2 F U B R2 D' B L' F' U2 F2 U' D2 R D' B U2");
+			cube.executeSequence("R L U2 D2 L2 B2 R' B2 U2 F2 L2 B D' B' D' L' U' L2 B' D2 R");
 			initializeSolver();
 			isInitialized = true;
 			return;
@@ -177,9 +178,18 @@ public class OldPochmannSolver {
 
 		if (!edgesSolved) {
 			EdgePiece edgePiece = getBufferEdgePiece();
+			if(edgePiece == null) {
+				for(EdgePiece e : edgePieces) {
+					if(!e.isSolved) {
+						edgePiece = e;
+					}
+				}
+			}
+			System.out.println(edgePiece.name);
 			cube.executeSequence(edgePiece.setupMove);
 			executePermutation(edgePiece.perm);
 			cube.executeSequence(edgePiece.undoSetupMove);
+			edgePiece.isSolved = true;
 		}
 
 	}
