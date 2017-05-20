@@ -18,6 +18,8 @@ public class OldPochmannSolver {
 	private boolean isInitialized = false;
 
 	private boolean edgesSolved = false;
+	
+	private boolean cornersSolved = false;
 
 	/* Algorithms */
 	private String tPerm = "R U R' U' R' F R2 U' R' U' R U R' F'";
@@ -228,6 +230,14 @@ public class OldPochmannSolver {
 			executePermutation(edgePiece.perm);
 			cube.executeSequence(edgePiece.undoSetupMove);
 			edgePiece.isSolved = true;
+			
+			/* Also mark corresponding pieces */
+			String reverseEdgeName = new StringBuilder(edgePiece.name).reverse().toString();
+			for (EdgePiece e : edgePieces) {
+				if (e.name.equals(reverseEdgeName)) {
+					e.isSolved = true;
+				}
+			}
 
 			
 			/* Check if edge solving is done */
@@ -263,8 +273,32 @@ public class OldPochmannSolver {
 					executePermutation(flippedPiece.perm);
 					cube.executeSequence(flippedPiece.undoSetupMove);
 				}
+				return;
 			}
 		}
+		
+//		if(!cornersSolved) {
+//			CornerPiece cornerPiece = getBufferCornerPiece();
+//			if(cornerPiece == null) {
+//				for (CornerPiece c : cornerPieces) {
+//					if (!c.isSolved && c.name.equals("FRU")) {
+//						cornerPiece = c;
+//					}
+//				}
+//				if (cornerPiece == null) {
+//					cornersSolved = true;
+//					return;
+//				}
+//			}
+//			System.out.println(cornerPiece.name);
+//			cube.executeSequence(cornerPiece.setupMove);
+//			executePermutation(cornerPiece.perm);
+//			cube.executeSequence(cornerPiece.undoSetupMove);
+//			cornerPiece.isSolved = true;
+//			
+//			/* Check if corner solving is done */
+//			List<EdgePiece> flippedPieces = new ArrayList<>();
+//		}
 
 
 
@@ -304,6 +338,19 @@ public class OldPochmannSolver {
 			}
 		}
 		return edgePiece;
+	}
+	private CornerPiece getBufferCornerPiece() {
+		int bufferColor1 = cube.getTopCubeFace().getSubCubeColor(0, 0);
+		int bufferColor2 = cube.getLeftCubeFace().getSubCubeColor(0, 0);
+		int bufferColor3 = cube.getBackCubeFace().getSubCubeColor(2, 0);
+		CornerPiece cornerPiece = null;
+		for(CornerPiece piece : cornerPieces) {
+			if(piece.color1 == bufferColor1 && piece.color2 == bufferColor2 && piece.color3 == bufferColor3) {
+				cornerPiece = piece;
+				break;
+			}
+		}
+		return cornerPiece;
 	}
 
 }
