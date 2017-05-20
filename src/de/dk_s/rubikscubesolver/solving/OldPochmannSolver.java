@@ -192,10 +192,6 @@ public class OldPochmannSolver {
 		return cubeFace;
 	}
 
-	private void solveEdges() {
-
-	}
-
 	/* Implements http://www.chessandpoker.com/rubiks-cube-solution.html */
 	public void getNextMove() {
 
@@ -235,6 +231,7 @@ public class OldPochmannSolver {
 
 			
 			/* Check if edge solving is done */
+			List<EdgePiece> flippedPieces = new ArrayList<>();
 			edgesSolved = true;
 			for(EdgePiece piece : edgePieces) {
 				String reverseName = new StringBuilder(piece.name).reverse().toString();
@@ -246,17 +243,30 @@ public class OldPochmannSolver {
 				}
 				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
 				int currentColor2 = getFaceFromNotationString(matchingPiece.name.substring(0, 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
-				if(!(currentColor1 == piece.color1 && currentColor2 == piece.color2 || currentColor1 == piece.color2 && currentColor2 == piece.color1)) {
+				boolean solved = false;
+				if(currentColor1 == piece.color1 && currentColor2 == piece.color2) {
+					solved = true;
+				}
+				if(currentColor1 == piece.color2 && currentColor2 == piece.color1) {
+					flippedPieces.add(piece);
+					solved = true;
+				}
+				if(solved == false) {
 					edgesSolved = false;
+					break;
 				}
 			}
-			System.out.println(edgesSolved);
+			/* Check which edges are flipped and correct them */
+			if(edgesSolved) {
+				for(EdgePiece flippedPiece : flippedPieces) {
+					cube.executeSequence(flippedPiece.setupMove);
+					executePermutation(flippedPiece.perm);
+					cube.executeSequence(flippedPiece.undoSetupMove);
+				}
+			}
 		}
 
-		/* Flip edges */
-		if (edgesSolved) {
 
-		}
 
 	}
 
