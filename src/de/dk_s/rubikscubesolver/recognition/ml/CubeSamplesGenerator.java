@@ -18,7 +18,8 @@ public class CubeSamplesGenerator {
 
 	private static String trainingSetPath = "C:\\Users\\Daniel\\Code\\ml_resources\\rubikscube";
 	
-	private static Random rnd = null;
+	private static
+	Random rnd = null;
 
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

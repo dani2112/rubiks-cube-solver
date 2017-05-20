@@ -212,7 +212,7 @@ public class OldPochmannSolver {
 			setupCubeOrientation();
 
 			/* Only for testing! Remove scramble after full test */
-			//cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
+			cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
 
 			initializeSolver();
 			isInitialized = true;
@@ -349,10 +349,18 @@ public class OldPochmannSolver {
 				} else {
 					/* Add Code to detect flipped corners here
 					 * is not necessary but useful! */
+//					System.out.println("#################");
+//					System.out.println(piece.name);
+//					System.out.println(piece.color1);
+//					System.out.println(piece.color2);
+//					System.out.println(piece.color3);
+//					System.out.println("------------");
+//					System.out.println(currentColor1);
+//					System.out.println(currentColor2);
+//					System.out.println(currentColor3);
 				}
 			}
 			if (cornersSolved) {
-				System.out.println(twistedCorners.size());
 				/* If odd number of corners apply parity fix */
 				if (cornerSolvingSteps % 2 != 0) {
 					cube.rotateYAxis90CounterClockwise();
