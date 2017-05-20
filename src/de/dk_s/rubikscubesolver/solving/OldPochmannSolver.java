@@ -23,6 +23,8 @@ public class OldPochmannSolver {
 
 	private boolean cornersSolved = false;
 
+	private int cornerSolvingSteps = 0;
+
 	/* Algorithms */
 	private String tPerm = "R U R' U' R' F R2 U' R' U' R U R' F'";
 
@@ -210,7 +212,7 @@ public class OldPochmannSolver {
 			setupCubeOrientation();
 
 			/* Only for testing! Remove scramble after full test */
-			cube.executeSequence("R L U2 D2 L2 B2 R' B2 U2 F2 L2 B D' B' D' L' U' L2 B' D2 R");
+			//cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
 
 			initializeSolver();
 			isInitialized = true;
@@ -218,77 +220,75 @@ public class OldPochmannSolver {
 		}
 
 		/* Solve edges */
-		// if (!edgesSolved) {
-		// EdgePiece edgePiece = getBufferEdgePiece();
-		// if (edgePiece == null) {
-		// for (EdgePiece e : edgePieces) {
-		// if (!e.isSolved) {
-		// edgePiece = e;
-		// }
-		// }
-		// if (edgePiece == null) {
-		// edgesSolved = true;
-		// return;
-		// }
-		// }
-		// cube.executeSequence(edgePiece.setupMove);
-		// executePermutation(edgePiece.perm);
-		// cube.executeSequence(edgePiece.undoSetupMove);
-		// edgePiece.isSolved = true;
-		//
-		// /* Also mark corresponding pieces */
-		// String reverseEdgeName = new
-		// StringBuilder(edgePiece.name).reverse().toString();
-		// for (EdgePiece e : edgePieces) {
-		// if (e.name.equals(reverseEdgeName)) {
-		// e.isSolved = true;
-		// }
-		// }
-		//
-		//
-		// /* Check if edge solving is done */
-		// List<EdgePiece> flippedPieces = new ArrayList<>();
-		// edgesSolved = true;
-		// for(EdgePiece piece : edgePieces) {
-		// String reverseName = new
-		// StringBuilder(piece.name).reverse().toString();
-		// EdgePiece matchingPiece = null;
-		// for(EdgePiece mPiece : edgePieces) {
-		// if(reverseName.equals(mPiece.name)) {
-		// matchingPiece = mPiece;
-		// };
-		// }
-		// int currentColor1 = getFaceFromNotationString(piece.name.substring(0,
-		// 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
-		// int currentColor2 =
-		// getFaceFromNotationString(matchingPiece.name.substring(0,
-		// 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
-		// boolean solved = false;
-		// if(currentColor1 == piece.color1 && currentColor2 == piece.color2) {
-		// solved = true;
-		// }
-		// if(currentColor1 == piece.color2 && currentColor2 == piece.color1) {
-		// flippedPieces.add(piece);
-		// solved = true;
-		// }
-		// if(solved == false) {
-		// edgesSolved = false;
-		// break;
-		// }
-		// }
-		// /* Check which edges are flipped and correct them */
-		// if(edgesSolved) {
-		// for(EdgePiece flippedPiece : flippedPieces) {
-		// cube.executeSequence(flippedPiece.setupMove);
-		// executePermutation(flippedPiece.perm);
-		// cube.executeSequence(flippedPiece.undoSetupMove);
-		// }
-		// return;
-		// }
-		// }
+		if (!edgesSolved && cornersSolved) {
+			EdgePiece edgePiece = getBufferEdgePiece();
+			if (edgePiece == null) {
+				for (EdgePiece e : edgePieces) {
+					if (!e.isSolved) {
+						edgePiece = e;
+					}
+				}
+				if (edgePiece == null) {
+					edgesSolved = true;
+					return;
+				}
+			}
+			cube.executeSequence(edgePiece.setupMove);
+			executePermutation(edgePiece.perm);
+			cube.executeSequence(edgePiece.undoSetupMove);
+			edgePiece.isSolved = true;
 
-		if (!cornersSolved) {
+			/* Also mark corresponding pieces */
+			String reverseEdgeName = new StringBuilder(edgePiece.name).reverse().toString();
+			for (EdgePiece e : edgePieces) {
+				if (e.name.equals(reverseEdgeName)) {
+					e.isSolved = true;
+				}
+			}
+
+			/* Check if edge solving is done */
+			List<EdgePiece> flippedPieces = new ArrayList<>();
+			edgesSolved = true;
+			for (EdgePiece piece : edgePieces) {
+				String reverseName = new StringBuilder(piece.name).reverse().toString();
+				EdgePiece matchingPiece = null;
+				for (EdgePiece mPiece : edgePieces) {
+					if (reverseName.equals(mPiece.name)) {
+						matchingPiece = mPiece;
+					}
+
+				}
+				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex,
+						piece.yIndex);
+				int currentColor2 = getFaceFromNotationString(matchingPiece.name.substring(0, 1))
+						.getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
+				boolean solved = false;
+				if (currentColor1 == piece.color1 && currentColor2 == piece.color2) {
+					solved = true;
+				}
+				if (currentColor1 == piece.color2 && currentColor2 == piece.color1) {
+					flippedPieces.add(piece);
+					solved = true;
+				}
+				if (solved == false) {
+					edgesSolved = false;
+					break;
+				}
+			}
+			/* Check which edges are flipped and correct them */
+			if (edgesSolved) {
+				for (EdgePiece flippedPiece : flippedPieces) {
+					cube.executeSequence(flippedPiece.setupMove);
+					executePermutation(flippedPiece.perm);
+					cube.executeSequence(flippedPiece.undoSetupMove);
+				}
+				return;
+			}
+		}
+
+		if (!cornersSolved && !edgesSolved) {
 			System.out.println("Corner solve");
+			this.cornerSolvingSteps++;
 			CornerPiece cornerPiece = getBufferCornerPiece();
 			if (cornerPiece == null) {
 				for (CornerPiece c : cornerPieces) {
@@ -317,7 +317,7 @@ public class OldPochmannSolver {
 			}
 
 			/* Check if corner solving is done */
-			List<EdgePiece> flippedPieces = new ArrayList<>();
+			List<CornerPiece> twistedCorners = new ArrayList<>();
 			cornersSolved = true;
 			for (CornerPiece piece : cornerPieces) {
 				List<String> namePermutations = new ArrayList<>();
@@ -344,11 +344,24 @@ public class OldPochmannSolver {
 				isSet.add(currentColor1);
 				isSet.add(currentColor2);
 				isSet.add(currentColor3);
-				if(!isSet.containsAll(shouldSet)) {
+				if (!isSet.containsAll(shouldSet)) {
 					cornersSolved = false;
+				} else {
+					/* Add Code to detect flipped corners here
+					 * is not necessary but useful! */
 				}
-
 			}
+			if (cornersSolved) {
+				System.out.println(twistedCorners.size());
+				/* If odd number of corners apply parity fix */
+				if (cornerSolvingSteps % 2 != 0) {
+					cube.rotateYAxis90CounterClockwise();
+					cube.executeSequence(rPerm);
+					cube.rotateYAxis90Clockwise();
+					System.out.println("Parity");
+				}
+			}
+
 		}
 
 	}
