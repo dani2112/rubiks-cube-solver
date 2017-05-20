@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class OldPochmannSolver {
 	private boolean isInitialized = false;
 
 	private boolean edgesSolved = false;
-	
+
 	private boolean cornersSolved = false;
 
 	/* Algorithms */
@@ -41,9 +42,9 @@ public class OldPochmannSolver {
 	private static class EdgePiece {
 
 		public String name = "";
-		
+
 		public int xIndex = 0;
-		
+
 		public int yIndex = 0;
 
 		public int color1 = 0;
@@ -61,6 +62,9 @@ public class OldPochmannSolver {
 
 	private static class CornerPiece {
 		public String name = "";
+
+		public int xIndex = 0;
+		public int yIndex = 0;
 
 		public int color1 = 0;
 		public int color2 = 0;
@@ -125,6 +129,8 @@ public class OldPochmannSolver {
 				cornerPiece.setupMove = lineSplit[1].equals("none") ? "" : lineSplit[1];
 				cornerPiece.perm = lineSplit[2].equals("none") ? "" : lineSplit[2];
 				cornerPiece.undoSetupMove = lineSplit[3].equals("none") ? "" : lineSplit[3];
+				cornerPiece.xIndex = Integer.parseInt(lineSplit[4]);
+				cornerPiece.yIndex = Integer.parseInt(lineSplit[5]);
 				cornerPiece.color1 = getFaceColorFromNotationString(cornerPiece.name.substring(0, 1));
 				cornerPiece.color2 = getFaceColorFromNotationString(cornerPiece.name.substring(1, 2));
 				cornerPiece.color3 = getFaceColorFromNotationString(cornerPiece.name.substring(2, 3));
@@ -137,8 +143,6 @@ public class OldPochmannSolver {
 
 	}
 
-	
-	
 	private int getFaceColorFromNotationString(String face) {
 		int color = 0;
 		switch (face) {
@@ -166,7 +170,7 @@ public class OldPochmannSolver {
 		}
 		return color;
 	}
-	
+
 	private CubeFace getFaceFromNotationString(String face) {
 		CubeFace cubeFace = null;
 		switch (face) {
@@ -214,73 +218,79 @@ public class OldPochmannSolver {
 		}
 
 		/* Solve edges */
-//		if (!edgesSolved) {
-//			EdgePiece edgePiece = getBufferEdgePiece();
-//			if (edgePiece == null) {
-//				for (EdgePiece e : edgePieces) {
-//					if (!e.isSolved) {
-//						edgePiece = e;
-//					}
-//				}
-//				if (edgePiece == null) {
-//					edgesSolved = true;
-//					return;
-//				}
-//			}
-//			cube.executeSequence(edgePiece.setupMove);
-//			executePermutation(edgePiece.perm);
-//			cube.executeSequence(edgePiece.undoSetupMove);
-//			edgePiece.isSolved = true;
-//			
-//			/* Also mark corresponding pieces */
-//			String reverseEdgeName = new StringBuilder(edgePiece.name).reverse().toString();
-//			for (EdgePiece e : edgePieces) {
-//				if (e.name.equals(reverseEdgeName)) {
-//					e.isSolved = true;
-//				}
-//			}
-//
-//			
-//			/* Check if edge solving is done */
-//			List<EdgePiece> flippedPieces = new ArrayList<>();
-//			edgesSolved = true;
-//			for(EdgePiece piece : edgePieces) {
-//				String reverseName = new StringBuilder(piece.name).reverse().toString();
-//				EdgePiece matchingPiece = null;
-//				for(EdgePiece mPiece : edgePieces) {
-//					if(reverseName.equals(mPiece.name)) {
-//						matchingPiece = mPiece;
-//					};
-//				}
-//				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
-//				int currentColor2 = getFaceFromNotationString(matchingPiece.name.substring(0, 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
-//				boolean solved = false;
-//				if(currentColor1 == piece.color1 && currentColor2 == piece.color2) {
-//					solved = true;
-//				}
-//				if(currentColor1 == piece.color2 && currentColor2 == piece.color1) {
-//					flippedPieces.add(piece);
-//					solved = true;
-//				}
-//				if(solved == false) {
-//					edgesSolved = false;
-//					break;
-//				}
-//			}
-//			/* Check which edges are flipped and correct them */
-//			if(edgesSolved) {
-//				for(EdgePiece flippedPiece : flippedPieces) {
-//					cube.executeSequence(flippedPiece.setupMove);
-//					executePermutation(flippedPiece.perm);
-//					cube.executeSequence(flippedPiece.undoSetupMove);
-//				}
-//				return;
-//			}
-//		}
-		
-		if(!cornersSolved) {
+		// if (!edgesSolved) {
+		// EdgePiece edgePiece = getBufferEdgePiece();
+		// if (edgePiece == null) {
+		// for (EdgePiece e : edgePieces) {
+		// if (!e.isSolved) {
+		// edgePiece = e;
+		// }
+		// }
+		// if (edgePiece == null) {
+		// edgesSolved = true;
+		// return;
+		// }
+		// }
+		// cube.executeSequence(edgePiece.setupMove);
+		// executePermutation(edgePiece.perm);
+		// cube.executeSequence(edgePiece.undoSetupMove);
+		// edgePiece.isSolved = true;
+		//
+		// /* Also mark corresponding pieces */
+		// String reverseEdgeName = new
+		// StringBuilder(edgePiece.name).reverse().toString();
+		// for (EdgePiece e : edgePieces) {
+		// if (e.name.equals(reverseEdgeName)) {
+		// e.isSolved = true;
+		// }
+		// }
+		//
+		//
+		// /* Check if edge solving is done */
+		// List<EdgePiece> flippedPieces = new ArrayList<>();
+		// edgesSolved = true;
+		// for(EdgePiece piece : edgePieces) {
+		// String reverseName = new
+		// StringBuilder(piece.name).reverse().toString();
+		// EdgePiece matchingPiece = null;
+		// for(EdgePiece mPiece : edgePieces) {
+		// if(reverseName.equals(mPiece.name)) {
+		// matchingPiece = mPiece;
+		// };
+		// }
+		// int currentColor1 = getFaceFromNotationString(piece.name.substring(0,
+		// 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
+		// int currentColor2 =
+		// getFaceFromNotationString(matchingPiece.name.substring(0,
+		// 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
+		// boolean solved = false;
+		// if(currentColor1 == piece.color1 && currentColor2 == piece.color2) {
+		// solved = true;
+		// }
+		// if(currentColor1 == piece.color2 && currentColor2 == piece.color1) {
+		// flippedPieces.add(piece);
+		// solved = true;
+		// }
+		// if(solved == false) {
+		// edgesSolved = false;
+		// break;
+		// }
+		// }
+		// /* Check which edges are flipped and correct them */
+		// if(edgesSolved) {
+		// for(EdgePiece flippedPiece : flippedPieces) {
+		// cube.executeSequence(flippedPiece.setupMove);
+		// executePermutation(flippedPiece.perm);
+		// cube.executeSequence(flippedPiece.undoSetupMove);
+		// }
+		// return;
+		// }
+		// }
+
+		if (!cornersSolved) {
+			System.out.println("Corner solve");
 			CornerPiece cornerPiece = getBufferCornerPiece();
-			if(cornerPiece == null) {
+			if (cornerPiece == null) {
 				for (CornerPiece c : cornerPieces) {
 					if (!c.isSolved) {
 						cornerPiece = c;
@@ -291,24 +301,67 @@ public class OldPochmannSolver {
 					return;
 				}
 			}
-			System.out.println(cornerPiece.name);
 			cube.executeSequence(cornerPiece.setupMove);
 			executePermutation(cornerPiece.perm);
 			cube.executeSequence(cornerPiece.undoSetupMove);
 			cornerPiece.isSolved = true;
-			
+
 			/* Also mark corressponding pieces */
-			for(CornerPiece piece : cornerPieces) {
-				if((piece.color1 == cornerPiece.color1 && piece.color2 == cornerPiece.color2 && piece.color3 == cornerPiece.color3) ||
-						(piece.color1 == cornerPiece.color1 && piece.color2 == cornerPiece.color3 && piece.color3 == cornerPiece.color2)) {
+			for (CornerPiece piece : cornerPieces) {
+				if ((piece.color1 == cornerPiece.color1 && piece.color2 == cornerPiece.color2
+						&& piece.color3 == cornerPiece.color3)
+						|| (piece.color1 == cornerPiece.color1 && piece.color2 == cornerPiece.color3
+								&& piece.color3 == cornerPiece.color2)) {
 					piece.isSolved = true;
 				}
 			}
-			
+
 			/* Check if corner solving is done */
 			List<EdgePiece> flippedPieces = new ArrayList<>();
+			cornersSolved = true;
+			for (CornerPiece piece : cornerPieces) {
+				List<String> namePermutations = new ArrayList<>();
+				generatePermutations("", piece.name, namePermutations);
+				List<CornerPiece> matchingPieces = new ArrayList<>();
+				for (CornerPiece matchingPiece : cornerPieces) {
+					for (String namePermutation : namePermutations) {
+						if (namePermutation.equals(matchingPiece.name) && !namePermutation.equals(piece.name)) {
+							matchingPieces.add(matchingPiece);
+						}
+					}
+				}
+				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex,
+						piece.yIndex);
+				int currentColor2 = getFaceFromNotationString(matchingPieces.get(0).name.substring(0, 1))
+						.getSubCubeColor(matchingPieces.get(0).xIndex, matchingPieces.get(0).yIndex);
+				int currentColor3 = getFaceFromNotationString(matchingPieces.get(1).name.substring(0, 1))
+						.getSubCubeColor(matchingPieces.get(1).xIndex, matchingPieces.get(1).yIndex);
+				HashSet<Integer> shouldSet = new HashSet<>();
+				shouldSet.add(piece.color1);
+				shouldSet.add(piece.color2);
+				shouldSet.add(piece.color3);
+				HashSet<Integer> isSet = new HashSet<>();
+				isSet.add(currentColor1);
+				isSet.add(currentColor2);
+				isSet.add(currentColor3);
+				if(!isSet.containsAll(shouldSet)) {
+					cornersSolved = false;
+				}
+
+			}
 		}
 
+	}
+
+	private static void generatePermutations(String prefix, String str, List<String> permutations) {
+		int n = str.length();
+		if (n == 0)
+			permutations.add(prefix);
+		else {
+			for (int i = 0; i < n; i++)
+				generatePermutations(prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1, n),
+						permutations);
+		}
 	}
 
 	private void executePermutation(String perm) {
@@ -346,15 +399,15 @@ public class OldPochmannSolver {
 		}
 		return edgePiece;
 	}
+
 	private CornerPiece getBufferCornerPiece() {
 		int bufferColor1 = cube.getTopCubeFace().getSubCubeColor(0, 0);
 		int bufferColor2 = cube.getLeftCubeFace().getSubCubeColor(0, 0);
 		int bufferColor3 = cube.getBackCubeFace().getSubCubeColor(2, 0);
-		System.out.println(bufferColor1 + " " + bufferColor2 + " " + bufferColor3);
 		CornerPiece cornerPiece = null;
-		for(CornerPiece piece : cornerPieces) {
-			if((piece.color1 == bufferColor1 && piece.color2 == bufferColor2 && piece.color3 == bufferColor3) ||
-					(piece.color1 == bufferColor1 && piece.color2 == bufferColor3 && piece.color3 == bufferColor2)) {
+		for (CornerPiece piece : cornerPieces) {
+			if ((piece.color1 == bufferColor1 && piece.color2 == bufferColor2 && piece.color3 == bufferColor3)
+					|| (piece.color1 == bufferColor1 && piece.color2 == bufferColor3 && piece.color3 == bufferColor2)) {
 				cornerPiece = piece;
 				break;
 			}

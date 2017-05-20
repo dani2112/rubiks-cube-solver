@@ -1,21 +1,21 @@
-UBR;R D';Y-perm;D R'
-UFR;F;Y-perm;F'
-UFL;F R';Y-perm;R F'
-FLU;F' D;Y-perm;D' F
-FRU;R2 D';Y-perm;D R2
-FRD;R F;Y-perm;F' R'
-FLD;D;Y-perm;D'
-LFU;F2;Y-perm;F2
-LFD;D2 R;Y-perm;R' D2
-LBD;D2;Y-perm;D2
-BUR;R' F;Y-perm;F' R
-BDL;D' R;Y-perm;R' D
-BDR;D';Y-perm;D
-RUF;R';Y-perm;R
-RUB;R2;Y-perm;R2
-RDB;R;Y-perm;R'
-RDF;none;Y-perm;none
-DFL;F';Y-perm;F
-DFR;F' R';Y-perm;R F
-DBR;R2 F;Y-perm;F' R2
-DBL;D F';Y-perm;F D'
+UBR;R D';Y-perm;D R';2;0
+UFR;F;Y-perm;F';2;2
+UFL;F R';Y-perm;R F';0;2
+FLU;F' D;Y-perm;D' F;0;0
+FRU;R2 D';Y-perm;D R2;2;0
+FRD;R F;Y-perm;F' R';2;2
+FLD;D;Y-perm;D';0;2
+LFU;F2;Y-perm;F2;2;0
+LFD;D2 R;Y-perm;R' D2;2;2
+LBD;D2;Y-perm;D2;0;2
+BUR;R' F;Y-perm;F' R;0;0
+BDL;D' R;Y-perm;R' D;2;2
+BDR;D';Y-perm;D;0;2
+RUF;R';Y-perm;R;0;0
+RUB;R2;Y-perm;R2;2;0
+RDB;R;Y-perm;R';2;2
+RDF;none;Y-perm;none;0;2
+DFL;F';Y-perm;F;0;0
+DFR;F' R';Y-perm;R F;2;0
+DBR;R2 F;Y-perm;F' R2;2;2
+DBL;D F';Y-perm;F D';0;2
