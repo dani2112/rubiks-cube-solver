@@ -3,6 +3,7 @@ package de.dk_s.rubikscubesolver.solving;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -213,94 +214,100 @@ public class OldPochmannSolver {
 		}
 
 		/* Solve edges */
-		if (!edgesSolved) {
-			EdgePiece edgePiece = getBufferEdgePiece();
-			if (edgePiece == null) {
-				for (EdgePiece e : edgePieces) {
-					if (!e.isSolved) {
-						edgePiece = e;
-					}
-				}
-				if (edgePiece == null) {
-					edgesSolved = true;
-					return;
-				}
-			}
-			cube.executeSequence(edgePiece.setupMove);
-			executePermutation(edgePiece.perm);
-			cube.executeSequence(edgePiece.undoSetupMove);
-			edgePiece.isSolved = true;
-			
-			/* Also mark corresponding pieces */
-			String reverseEdgeName = new StringBuilder(edgePiece.name).reverse().toString();
-			for (EdgePiece e : edgePieces) {
-				if (e.name.equals(reverseEdgeName)) {
-					e.isSolved = true;
-				}
-			}
-
-			
-			/* Check if edge solving is done */
-			List<EdgePiece> flippedPieces = new ArrayList<>();
-			edgesSolved = true;
-			for(EdgePiece piece : edgePieces) {
-				String reverseName = new StringBuilder(piece.name).reverse().toString();
-				EdgePiece matchingPiece = null;
-				for(EdgePiece mPiece : edgePieces) {
-					if(reverseName.equals(mPiece.name)) {
-						matchingPiece = mPiece;
-					};
-				}
-				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
-				int currentColor2 = getFaceFromNotationString(matchingPiece.name.substring(0, 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
-				boolean solved = false;
-				if(currentColor1 == piece.color1 && currentColor2 == piece.color2) {
-					solved = true;
-				}
-				if(currentColor1 == piece.color2 && currentColor2 == piece.color1) {
-					flippedPieces.add(piece);
-					solved = true;
-				}
-				if(solved == false) {
-					edgesSolved = false;
-					break;
-				}
-			}
-			/* Check which edges are flipped and correct them */
-			if(edgesSolved) {
-				for(EdgePiece flippedPiece : flippedPieces) {
-					cube.executeSequence(flippedPiece.setupMove);
-					executePermutation(flippedPiece.perm);
-					cube.executeSequence(flippedPiece.undoSetupMove);
-				}
-				return;
-			}
-		}
-		
-//		if(!cornersSolved) {
-//			CornerPiece cornerPiece = getBufferCornerPiece();
-//			if(cornerPiece == null) {
-//				for (CornerPiece c : cornerPieces) {
-//					if (!c.isSolved && c.name.equals("FRU")) {
-//						cornerPiece = c;
+//		if (!edgesSolved) {
+//			EdgePiece edgePiece = getBufferEdgePiece();
+//			if (edgePiece == null) {
+//				for (EdgePiece e : edgePieces) {
+//					if (!e.isSolved) {
+//						edgePiece = e;
 //					}
 //				}
-//				if (cornerPiece == null) {
-//					cornersSolved = true;
+//				if (edgePiece == null) {
+//					edgesSolved = true;
 //					return;
 //				}
 //			}
-//			System.out.println(cornerPiece.name);
-//			cube.executeSequence(cornerPiece.setupMove);
-//			executePermutation(cornerPiece.perm);
-//			cube.executeSequence(cornerPiece.undoSetupMove);
-//			cornerPiece.isSolved = true;
+//			cube.executeSequence(edgePiece.setupMove);
+//			executePermutation(edgePiece.perm);
+//			cube.executeSequence(edgePiece.undoSetupMove);
+//			edgePiece.isSolved = true;
 //			
-//			/* Check if corner solving is done */
+//			/* Also mark corresponding pieces */
+//			String reverseEdgeName = new StringBuilder(edgePiece.name).reverse().toString();
+//			for (EdgePiece e : edgePieces) {
+//				if (e.name.equals(reverseEdgeName)) {
+//					e.isSolved = true;
+//				}
+//			}
+//
+//			
+//			/* Check if edge solving is done */
 //			List<EdgePiece> flippedPieces = new ArrayList<>();
+//			edgesSolved = true;
+//			for(EdgePiece piece : edgePieces) {
+//				String reverseName = new StringBuilder(piece.name).reverse().toString();
+//				EdgePiece matchingPiece = null;
+//				for(EdgePiece mPiece : edgePieces) {
+//					if(reverseName.equals(mPiece.name)) {
+//						matchingPiece = mPiece;
+//					};
+//				}
+//				int currentColor1 = getFaceFromNotationString(piece.name.substring(0, 1)).getSubCubeColor(piece.xIndex, piece.yIndex);
+//				int currentColor2 = getFaceFromNotationString(matchingPiece.name.substring(0, 1)).getSubCubeColor(matchingPiece.xIndex, matchingPiece.yIndex);
+//				boolean solved = false;
+//				if(currentColor1 == piece.color1 && currentColor2 == piece.color2) {
+//					solved = true;
+//				}
+//				if(currentColor1 == piece.color2 && currentColor2 == piece.color1) {
+//					flippedPieces.add(piece);
+//					solved = true;
+//				}
+//				if(solved == false) {
+//					edgesSolved = false;
+//					break;
+//				}
+//			}
+//			/* Check which edges are flipped and correct them */
+//			if(edgesSolved) {
+//				for(EdgePiece flippedPiece : flippedPieces) {
+//					cube.executeSequence(flippedPiece.setupMove);
+//					executePermutation(flippedPiece.perm);
+//					cube.executeSequence(flippedPiece.undoSetupMove);
+//				}
+//				return;
+//			}
 //		}
-
-
+		
+		if(!cornersSolved) {
+			CornerPiece cornerPiece = getBufferCornerPiece();
+			if(cornerPiece == null) {
+				for (CornerPiece c : cornerPieces) {
+					if (!c.isSolved) {
+						cornerPiece = c;
+					}
+				}
+				if (cornerPiece == null) {
+					cornersSolved = true;
+					return;
+				}
+			}
+			System.out.println(cornerPiece.name);
+			cube.executeSequence(cornerPiece.setupMove);
+			executePermutation(cornerPiece.perm);
+			cube.executeSequence(cornerPiece.undoSetupMove);
+			cornerPiece.isSolved = true;
+			
+			/* Also mark corressponding pieces */
+			for(CornerPiece piece : cornerPieces) {
+				if((piece.color1 == cornerPiece.color1 && piece.color2 == cornerPiece.color2 && piece.color3 == cornerPiece.color3) ||
+						(piece.color1 == cornerPiece.color1 && piece.color2 == cornerPiece.color3 && piece.color3 == cornerPiece.color2)) {
+					piece.isSolved = true;
+				}
+			}
+			
+			/* Check if corner solving is done */
+			List<EdgePiece> flippedPieces = new ArrayList<>();
+		}
 
 	}
 
@@ -343,9 +350,11 @@ public class OldPochmannSolver {
 		int bufferColor1 = cube.getTopCubeFace().getSubCubeColor(0, 0);
 		int bufferColor2 = cube.getLeftCubeFace().getSubCubeColor(0, 0);
 		int bufferColor3 = cube.getBackCubeFace().getSubCubeColor(2, 0);
+		System.out.println(bufferColor1 + " " + bufferColor2 + " " + bufferColor3);
 		CornerPiece cornerPiece = null;
 		for(CornerPiece piece : cornerPieces) {
-			if(piece.color1 == bufferColor1 && piece.color2 == bufferColor2 && piece.color3 == bufferColor3) {
+			if((piece.color1 == bufferColor1 && piece.color2 == bufferColor2 && piece.color3 == bufferColor3) ||
+					(piece.color1 == bufferColor1 && piece.color2 == bufferColor3 && piece.color3 == bufferColor2)) {
 				cornerPiece = piece;
 				break;
 			}

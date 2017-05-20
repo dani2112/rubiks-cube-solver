@@ -1,7 +1,7 @@
 UBR;R D';Y-perm;D R'
 UFR;F;Y-perm;F'
 UFL;F R';Y-perm;R F'
-FLU;F' D;Y-perm;D' F 
+FLU;F' D;Y-perm;D' F
 FRU;R2 D';Y-perm;D R2
 FRD;R F;Y-perm;F' R'
 FLD;D;Y-perm;D'
@@ -10,7 +10,7 @@ LFD;D2 R;Y-perm;R' D2
 LBD;D2;Y-perm;D2
 BUR;R' F;Y-perm;F' R
 BDL;D' R;Y-perm;R' D
-BDR;D';Y-perm;D 
+BDR;D';Y-perm;D
 RUF;R';Y-perm;R
 RUB;R2;Y-perm;R2
 RDB;R;Y-perm;R'
@@ -18,4 +18,4 @@ RDF;none;Y-perm;none
 DFL;F';Y-perm;F
 DFR;F' R';Y-perm;R F
 DBR;R2 F;Y-perm;F' R2
-DBL;D F';Y-perm;F D
+DBL;D F';Y-perm;F D'
