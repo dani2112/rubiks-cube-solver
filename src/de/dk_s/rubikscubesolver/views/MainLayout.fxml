@@ -32,6 +32,16 @@
                <HBox.margin>
                   <Insets right="15.0" />
                </HBox.margin></ChoiceBox>
+            <Button fx:id="pickButton" mnemonicParsing="false" text="Pick" onAction="#pickColor">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="correctButton" mnemonicParsing="false" text="Correct" onAction="#correctFace">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin>
+            </Button>
             <Button fx:id="showStepButton" mnemonicParsing="false" onAction="#showNextStep" text="Show Next Step">
                <HBox.margin>
                   <Insets right="15.0" />

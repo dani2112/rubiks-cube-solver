@@ -159,7 +159,7 @@ public class CubeRenderer {
 		render();
 	}
 
-	private void render() {
+	public void render() {
 		root3D.getChildren().removeAll(frontFace, rightFace, backFace, leftFace, topFace, bottomFace);
 
 		float size = 10.0f;
