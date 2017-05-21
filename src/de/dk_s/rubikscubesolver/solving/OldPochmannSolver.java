@@ -201,7 +201,6 @@ public class OldPochmannSolver {
 		return cubeFace;
 	}
 
-	/* Implements http://www.chessandpoker.com/rubiks-cube-solution.html */
 	public void getNextMove() {
 
 	}
@@ -209,10 +208,11 @@ public class OldPochmannSolver {
 	public void executeNextMove() {
 		if (!isInitialized) {
 			System.out.println("Initialize");
-			setupCubeOrientation();
+			/* Would be necessary to match example */
+			//setupCubeOrientation();
 
 			/* Only for testing! Remove scramble after full test */
-			//cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
+			cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
 
 			initializeSolver();
 			isInitialized = true;
@@ -233,8 +233,12 @@ public class OldPochmannSolver {
 					return;
 				}
 			}
+			displayMoves("Solving Edge Piece");
+			displayMoves("Setup Move: " + edgePiece.setupMove);
 			cube.executeSequence(edgePiece.setupMove);
+			displayMoves("Apply " + edgePiece.perm + " permutation: " + getPermutationMovesAsString(edgePiece.perm));
 			executePermutation(edgePiece.perm);
+			displayMoves("Undo Setup Move: " + edgePiece.undoSetupMove);
 			cube.executeSequence(edgePiece.undoSetupMove);
 			edgePiece.isSolved = true;
 
@@ -277,9 +281,13 @@ public class OldPochmannSolver {
 			}
 			/* Check which edges are flipped and correct them */
 			if (edgesSolved) {
+				displayMoves("Edges are now solved. Correction of flipped edges:");
 				for (EdgePiece flippedPiece : flippedPieces) {
+					displayMoves("Setup Move: " + edgePiece.setupMove);
 					cube.executeSequence(flippedPiece.setupMove);
+					displayMoves("Apply " + edgePiece.perm + " permutation: " + getPermutationMovesAsString(edgePiece.perm));
 					executePermutation(flippedPiece.perm);
+					displayMoves("Undo Setup Move: " + edgePiece.undoSetupMove);
 					cube.executeSequence(flippedPiece.undoSetupMove);
 				}
 				return;
@@ -287,7 +295,6 @@ public class OldPochmannSolver {
 		}
 
 		if (!cornersSolved && !edgesSolved) {
-			System.out.println("Corner solve");
 			this.cornerSolvingSteps++;
 			CornerPiece cornerPiece = getBufferCornerPiece();
 			if (cornerPiece == null) {
@@ -301,8 +308,12 @@ public class OldPochmannSolver {
 					return;
 				}
 			}
+			displayMoves("Solving corner piece");
+			displayMoves("Setup Move: " + cornerPiece.setupMove);
 			cube.executeSequence(cornerPiece.setupMove);
+			displayMoves("Apply " + cornerPiece.perm + " permutation: " + getPermutationMovesAsString(cornerPiece.perm));
 			executePermutation(cornerPiece.perm);
+			displayMoves("Undo Setup Move: " + cornerPiece.undoSetupMove);
 			cube.executeSequence(cornerPiece.undoSetupMove);
 			cornerPiece.isSolved = true;
 
@@ -357,15 +368,19 @@ public class OldPochmannSolver {
 				}
 			}
 			if (cornersSolved) {
+				displayMoves("Corners are now solved.");
 				/* Correct twisted corners */
-				System.out.println("Correct corners");
+				//TODO
 				
 				/* If odd number of corners apply parity fix */
 				if (cornerSolvingSteps % 2 != 0) {
+					displayMoves("Needed odd number of moves. Parity fix necessary.");
+					displayMoves("Rotate cube around Y-axis counterclockwise: y'");
 					cube.rotateYAxis90CounterClockwise();
+					displayMoves("Apply R-perm: " + rPerm);
 					cube.executeSequence(rPerm);
+					displayMoves("Rotate cube around Y-axis clockwise: y");
 					cube.rotateYAxis90Clockwise();
-					System.out.println("Parity");
 				}
 			}
 
@@ -384,6 +399,31 @@ public class OldPochmannSolver {
 		}
 	}
 
+	private String getPermutationMovesAsString(String perm) {
+		perm = perm.toLowerCase();
+		String permString = "";
+		switch (perm) {
+		case "t-perm":
+			permString = tPerm;
+			break;
+		case "j-perm":
+			permString = jPerm;
+			break;
+		case "l-perm":
+			permString = lPerm;
+			break;
+		case "y-perm":
+			permString = yPerm;
+			break;
+		case "r-perm":
+			permString = rPerm;
+			break;
+		default:
+			permString = "Permutation unknown!";
+		}
+		return permString;
+	}
+	
 	private void executePermutation(String perm) {
 		perm = perm.toLowerCase();
 		switch (perm) {
@@ -433,6 +473,10 @@ public class OldPochmannSolver {
 			}
 		}
 		return cornerPiece;
+	}
+	
+	private void displayMoves(String moves) {
+		System.out.println(moves);
 	}
 
 }

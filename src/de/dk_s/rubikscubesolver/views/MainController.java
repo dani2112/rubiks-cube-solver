@@ -120,8 +120,6 @@ public class MainController {
 			@Override
 			public void update(Observable arg0, Object cmd) {
 				String command = (String) cmd;
-				System.out.println("ABC");
-				System.out.println(command);
 				stopScan();
 			}
 
@@ -313,7 +311,6 @@ public class MainController {
 
 	@FXML
 	public void executeNextStep() {
-		System.out.println("Execute");
 		solver.executeNextMove();
 	}
 
