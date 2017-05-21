@@ -150,6 +150,7 @@ public class MainController {
 			stopScan();
 		} else {
 			startScan();
+			cubeRecognizer.setCurrentCubeFaceIndex(selectedFaceId);
 		}
 	}
 
@@ -166,6 +167,7 @@ public class MainController {
 		try {
 			executor.shutdown();
 			executor.awaitTermination(100, TimeUnit.MILLISECONDS);
+			videoCapture.release();
 		} catch (InterruptedException e) {
 			System.out.println("Could not shutdown frame Capture!");
 		}

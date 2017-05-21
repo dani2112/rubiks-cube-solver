@@ -336,31 +336,30 @@ public class OldPochmannSolver {
 						.getSubCubeColor(matchingPieces.get(0).xIndex, matchingPieces.get(0).yIndex);
 				int currentColor3 = getFaceFromNotationString(matchingPieces.get(1).name.substring(0, 1))
 						.getSubCubeColor(matchingPieces.get(1).xIndex, matchingPieces.get(1).yIndex);
-				HashSet<Integer> shouldSet = new HashSet<>();
-				shouldSet.add(piece.color1);
-				shouldSet.add(piece.color2);
-				shouldSet.add(piece.color3);
-				HashSet<Integer> isSet = new HashSet<>();
-				isSet.add(currentColor1);
-				isSet.add(currentColor2);
-				isSet.add(currentColor3);
-				if (!isSet.containsAll(shouldSet)) {
+				
+//				HashSet<Integer> shouldSet = new HashSet<>();
+//				shouldSet.add(piece.color1);
+//				shouldSet.add(piece.color2);
+//				shouldSet.add(piece.color3);
+//				HashSet<Integer> isSet = new HashSet<>();
+//				isSet.add(currentColor1);
+//				isSet.add(currentColor2);
+//				isSet.add(currentColor3);
+				//Normally condition should be !isSet.containsAll(shouldSet)
+				if (piece.color1 != currentColor1) {
 					cornersSolved = false;
 				} else {
-					/* Add Code to detect flipped corners here
+					/* Add Code to detect twisted corners here
 					 * is not necessary but useful! */
-//					System.out.println("#################");
-//					System.out.println(piece.name);
-//					System.out.println(piece.color1);
-//					System.out.println(piece.color2);
-//					System.out.println(piece.color3);
-//					System.out.println("------------");
-//					System.out.println(currentColor1);
-//					System.out.println(currentColor2);
-//					System.out.println(currentColor3);
+					if(piece.color1 != currentColor1) {
+						twistedCorners.add(piece);
+					}
 				}
 			}
 			if (cornersSolved) {
+				/* Correct twisted corners */
+				System.out.println("Correct corners");
+				
 				/* If odd number of corners apply parity fix */
 				if (cornerSolvingSteps % 2 != 0) {
 					cube.rotateYAxis90CounterClockwise();
