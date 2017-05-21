@@ -90,6 +90,7 @@ public class OldPochmannSolver {
 	 * right
 	 */
 	public void setupCubeOrientation() {
+		displayMoves("Set Orientation of cube so that blue is top and red is front.");
 		cube.rotateYAxis90Clockwise();
 		cube.flip90DegreesLeft();
 	}
