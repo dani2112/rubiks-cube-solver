@@ -13,9 +13,9 @@ public class CubeFaceMLRecognizer {
 
 	private SvmClassifier subCubeClassifier = null;
 	
-	private String modelPath = "C:\\Users\\Daniel\\Code\\Java_Eclipse\\RubiksCubeSolver\\ml_models\\test4prob.txt.model";
+	private String modelPath = "C:\\Users\\Daniel\\Code\\Java_Eclipse\\RubiksCubeSolver\\ml_models\\test5prob.txt.model";
 	
-	private String rangePath = "C:\\Users\\Daniel\\Code\\Java_Eclipse\\RubiksCubeSolver\\ml_models\\test4.txt.range";
+	private String rangePath = "C:\\Users\\Daniel\\Code\\Java_Eclipse\\RubiksCubeSolver\\ml_models\\test5.txt.range";
 	
 	public CubeFaceMLRecognizer() {
 		subCubeClassifier = new SvmClassifier(modelPath, rangePath, new SubCubeFeatureExtractor());

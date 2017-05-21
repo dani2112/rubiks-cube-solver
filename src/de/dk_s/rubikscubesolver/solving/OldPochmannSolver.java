@@ -209,10 +209,10 @@ public class OldPochmannSolver {
 		if (!isInitialized) {
 			System.out.println("Initialize");
 			/* Would be necessary to match example */
-			//setupCubeOrientation();
+			setupCubeOrientation();
 
 			/* Only for testing! Remove scramble after full test */
-			cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
+			//cube.executeSequence("F' L' D L2 R2 D' U' B R2 U B' U L2 R F' D2 R' L' U' D R2 L D2 L' R F L' F2 L2 D2 R' F2 U B' U2 B' U2 D F U' D2 B' D2 B D2 L2 U' L' U2 F B2 D R' U' B F' L F R' B2 F L' F' B2 U' R U2 R2 D2 L' F' B2 D' U' L2 D' U' R' L2 U2 R B2 U F2 L B' L F' L R B' D' F' D' L2 R' D U R2 D R");
 
 			initializeSolver();
 			isInitialized = true;
